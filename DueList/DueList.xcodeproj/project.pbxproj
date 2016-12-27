@@ -520,6 +520,7 @@
 				B88A76F81E0F33D1003B269A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		B88A76F91E0F33D1003B269A /* Build configuration list for PBXNativeTarget "DueListTests" */ = {
 			isa = XCConfigurationList;
@@ -528,6 +529,7 @@
 				B88A76FB1E0F33D1003B269A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		B88A76FC1E0F33D1003B269A /* Build configuration list for PBXNativeTarget "DueListUITests" */ = {
 			isa = XCConfigurationList;
@@ -536,6 +538,7 @@
 				B88A76FE1E0F33D1003B269A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
