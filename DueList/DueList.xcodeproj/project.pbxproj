@@ -16,6 +16,7 @@
 		B88A76F21E0F33D1003B269A /* DueListUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88A76F11E0F33D1003B269A /* DueListUITests.swift */; };
 		B88A77001E0F342E003B269A /* InputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88A76FF1E0F342E003B269A /* InputViewController.swift */; };
 		B88A77021E0F3678003B269A /* DueElementCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88A77011E0F3678003B269A /* DueElementCell.swift */; };
+		B8A7926A1E144FE700CF884C /* DueElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A792691E144FE700CF884C /* DueElement.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		B88A76F31E0F33D1003B269A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B88A76FF1E0F342E003B269A /* InputViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputViewController.swift; sourceTree = "<group>"; };
 		B88A77011E0F3678003B269A /* DueElementCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DueElementCell.swift; sourceTree = "<group>"; };
+		B8A792691E144FE700CF884C /* DueElement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DueElement.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +83,7 @@
 		B88A76C51E0F33D1003B269A = {
 			isa = PBXGroup;
 			children = (
+				B8A792681E144F2400CF884C /* Model */,
 				B88A76D01E0F33D1003B269A /* DueList */,
 				B88A76E51E0F33D1003B269A /* DueListTests */,
 				B88A76F01E0F33D1003B269A /* DueListUITests */,
@@ -129,6 +132,14 @@
 				B88A76F31E0F33D1003B269A /* Info.plist */,
 			);
 			path = DueListUITests;
+			sourceTree = "<group>";
+		};
+		B8A792681E144F2400CF884C /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				B8A792691E144FE700CF884C /* DueElement.swift */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -271,6 +282,7 @@
 				B88A77001E0F342E003B269A /* InputViewController.swift in Sources */,
 				B88A76D41E0F33D1003B269A /* ListViewController.swift in Sources */,
 				B88A76D21E0F33D1003B269A /* AppDelegate.swift in Sources */,
+				B8A7926A1E144FE700CF884C /* DueElement.swift in Sources */,
 				B88A77021E0F3678003B269A /* DueElementCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

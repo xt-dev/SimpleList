@@ -8,9 +8,8 @@
 
 import UIKit
 
-
-    //Global Vars
-    var list = ["1", "2", "3"]
+//Global Vars
+var list = ["1", "2", "3"]
 
 class ListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate{
     
@@ -18,10 +17,28 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
     @IBOutlet weak var DueList: UITableView!
     @IBOutlet weak var CountLabel: UILabel!
     
+    //Buttons
+    @IBAction func ChangeView(_ sender: AnyObject) {
+        print("Change View button clicked")
+        let secondViewController = self.storyboard?.instantiateViewController(withIdentifier: "IVC") //as! ListViewController
+        self.present(secondViewController!, animated: true, completion: nil)
+    }
+    
     //Functions
+    
+    /*For swipe down gesture*/
+    func handleSwipes(_ sender : UISwipeGestureRecognizer){
+        if(sender.direction == .down /*&& sender.location(ofTouch: <#T##Int#>, in: <#T##UIView?#>)*/){
+            //animationstart = true
+            print("Handling gesture - LVC")
+            let secondViewController = self.storyboard?.instantiateViewController(withIdentifier: "IVC")
+            self.present(secondViewController!, animated: true, completion: nil)
+        }
+    }
+    
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
-        print("called tableview!")
+//        print("called tableview!")
         CountLabel.text = String(list.count)
         return(list.count)
     }
@@ -32,7 +49,7 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
         cell.textLabel?.text = list[indexPath.row]
         cell.nameLabel?.text = "Homework"
         cell.timeLabel?.text = String(describing: NSDate())
-        print("cell")
+        //print("cell")
         return(cell)
     }
     
@@ -45,14 +62,23 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
     }
     
+    //Override Functions
     override func viewDidAppear(_ animated: Bool) {
         print("reload!")
         DueList.reloadData()
+        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(InputViewController.handleSwipes(_:)))
+        swipeDown.direction = .down
+        view.addGestureRecognizer(swipeDown)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(InputViewController.handleSwipes(_:)))
+        swipeDown.direction = .down
+        view.addGestureRecognizer(swipeDown)
+
     }
 
     override func didReceiveMemoryWarning() {
@@ -60,6 +86,7 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
         // Dispose of any resources that can be recreated.
     }
 
+    
 
 }
 
