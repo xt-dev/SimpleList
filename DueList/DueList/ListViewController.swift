@@ -9,7 +9,8 @@
 import UIKit
 
 //Global Vars
-var list = ["1", "2", "3"]
+var list = [DueElement(dueName: "CS225 MP", month: 12, date: 28, hour: 21), DueElement(dueName: "ECON471 HW", month: 12, date: 30, hour: 12), DueElement(dueName: "IOS Coding", month: 12, date: 31, hour: 21)]
+
 
 class ListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate{
     
@@ -29,7 +30,7 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
     /*For swipe down gesture*/
     func handleSwipes(_ sender : UISwipeGestureRecognizer){
         if(sender.direction == .down /*&& sender.location(ofTouch: <#T##Int#>, in: <#T##UIView?#>)*/){
-            //animationstart = true
+
             print("Handling gesture - LVC")
             let secondViewController = self.storyboard?.instantiateViewController(withIdentifier: "IVC")
             self.present(secondViewController!, animated: true, completion: nil)
@@ -38,7 +39,6 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
-//        print("called tableview!")
         CountLabel.text = String(list.count)
         return(list.count)
     }
@@ -46,10 +46,15 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
         let cell: DueElementCell = tableView.dequeueReusableCell(withIdentifier: "cell") as! DueElementCell
-        cell.textLabel?.text = list[indexPath.row]
-        cell.nameLabel?.text = "Homework"
-        cell.timeLabel?.text = String(describing: NSDate())
-        //print("cell")
+        var progress: Float?
+        cell.textLabel?.text = String(indexPath.row+1)
+        cell.nameLabel?.text = list[indexPath.row].dueName
+        cell.timeLabel?.text = String(list[indexPath.row].timeLeft!) + "Hrs"
+        if (list[indexPath.row].color == UIColor.red) {progress = 0.9}
+        else if (list[indexPath.row].color == UIColor.yellow) {progress = 0.6}
+        else {progress = 0.3}
+        cell.progressBar?.progressTintColor = list[indexPath.row].color
+        cell.progressBar?.setProgress(progress!, animated: true)
         return(cell)
     }
     
@@ -66,15 +71,12 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
     override func viewDidAppear(_ animated: Bool) {
         print("reload!")
         DueList.reloadData()
-        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(InputViewController.handleSwipes(_:)))
-        swipeDown.direction = .down
-        view.addGestureRecognizer(swipeDown)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        
+        //Gesture control
         let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(InputViewController.handleSwipes(_:)))
         swipeDown.direction = .down
         view.addGestureRecognizer(swipeDown)

@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 class DueElementCell: UITableViewCell{
-    @IBOutlet weak var bar: UIProgressView!
+    @IBOutlet weak var progressBar: UIProgressView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
 }

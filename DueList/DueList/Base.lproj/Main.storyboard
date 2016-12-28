@@ -44,15 +44,15 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" fixedFrame="YES" progressViewStyle="bar" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="S3X-WB-eLc">
-                                                    <frame key="frameInset" minX="43" minY="40" width="290" height="3"/>
+                                                    <frame key="frameInset" minX="43" minY="40.5" width="290" height="2.5"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <rect key="contentStretch" x="0.0" y="1" width="1" height="1"/>
                                                 </progressView>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="bar" destination="kjh-vA-OXH" id="YQK-B4-kVm"/>
                                             <outlet property="nameLabel" destination="DNM-Zt-y35" id="T6I-IP-UZI"/>
+                                            <outlet property="progressBar" destination="S3X-WB-eLc" id="zji-Xr-xeg"/>
                                             <outlet property="timeLabel" destination="DYG-hk-g0C" id="StQ-LB-n3d"/>
                                         </connections>
                                     </tableViewCell>
@@ -159,6 +159,8 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="dateInput" destination="qma-Ug-TX4" id="9en-Z1-tSw"/>
+                        <outlet property="input" destination="sdB-ee-aRV" id="6Kd-Rx-zkc"/>
                         <segue destination="BYZ-38-t0r" kind="presentation" id="9b7-4E-wZQ"/>
                     </connections>
                 </viewController>
