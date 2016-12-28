@@ -28,9 +28,10 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
-        let cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "cell")
+        let cell: DueElementCell = tableView.dequeueReusableCell(withIdentifier: "cell") as! DueElementCell
         cell.textLabel?.text = list[indexPath.row]
-        
+        cell.nameLabel?.text = "Homework"
+        cell.timeLabel?.text = String(describing: NSDate())
         print("cell")
         return(cell)
     }
