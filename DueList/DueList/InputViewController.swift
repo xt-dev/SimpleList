@@ -39,6 +39,12 @@ class InputViewController: UIViewController {
             let secondViewController = self.storyboard?.instantiateViewController(withIdentifier: "LVC")
             self.present(secondViewController!, animated: true, completion: nil)
         }
+        else if (sender.direction == .down){
+            print("Cancel input")
+            let secondViewController = self.storyboard?.instantiateViewController(withIdentifier: "LVC")
+            self.present(secondViewController!, animated: true, completion: nil)
+
+        }
     }
 
     override func viewDidLoad() {
@@ -48,7 +54,10 @@ class InputViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         
         let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(InputViewController.handleSwipes(_:)))
+        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(InputViewController.handleSwipes(_:)))
         swipeUp.direction = .up
+        swipeDown.direction = .down
+        view.addGestureRecognizer(swipeDown)
         view.addGestureRecognizer(swipeUp)
     }
 
