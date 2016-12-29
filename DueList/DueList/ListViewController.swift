@@ -8,9 +8,9 @@
 
 import UIKit
 
+//Global Vars
+var dueList = [DueElement]()
 
-    //Global Vars
-    var list = ["1", "2", "3"]
 
 class ListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate{
     
@@ -18,21 +18,43 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
     @IBOutlet weak var DueList: UITableView!
     @IBOutlet weak var CountLabel: UILabel!
     
+    //Buttons
+    @IBAction func ChangeView(_ sender: AnyObject) {
+        print("Change View button clicked")
+        let secondViewController = self.storyboard?.instantiateViewController(withIdentifier: "IVC") //as! ListViewController
+        self.present(secondViewController!, animated: true, completion: nil)
+    }
+    
     //Functions
+    
+    /*For swipe down gesture*/
+    func handleSwipes(_ sender : UISwipeGestureRecognizer){
+        if(sender.direction == .down /*&& sender.location(ofTouch: <#T##Int#>, in: <#T##UIView?#>)*/){
+
+            print("Handling gesture - LVC")
+            let secondViewController = self.storyboard?.instantiateViewController(withIdentifier: "IVC")
+            self.present(secondViewController!, animated: true, completion: nil)
+        }
+    }
+    
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
-        print("called tableview!")
-        CountLabel.text = String(list.count)
-        return(list.count)
+        CountLabel.text = String(dueList.count)
+        return(dueList.count)
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
         let cell: DueElementCell = tableView.dequeueReusableCell(withIdentifier: "cell") as! DueElementCell
-        cell.textLabel?.text = list[indexPath.row]
-        cell.nameLabel?.text = "Homework"
-        cell.timeLabel?.text = String(describing: NSDate())
-        print("cell")
+        var progress: Float?
+        cell.textLabel?.text = String(indexPath.row+1)
+        cell.nameLabel?.text = dueList[indexPath.row].dueName
+        cell.timeLabel?.text = String(dueList[indexPath.row].timeLeft!) + "Hrs"
+        if (dueList[indexPath.row].color == UIColor.red) {progress = 0.9}
+        else if (dueList[indexPath.row].color == UIColor.yellow) {progress = 0.6}
+        else {progress = 0.3}
+        cell.progressBar?.progressTintColor = dueList[indexPath.row].color
+        cell.progressBar?.setProgress(progress!, animated: true)
         return(cell)
     }
     
@@ -40,11 +62,12 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
     {
         if editingStyle == UITableViewCellEditingStyle.delete
         {
-            list.remove(at: indexPath.row)
+            dueList.remove(at: indexPath.row)
             DueList.reloadData()
         }
     }
     
+    //Override Functions
     override func viewDidAppear(_ animated: Bool) {
         print("reload!")
         DueList.reloadData()
@@ -53,6 +76,11 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        //Gesture control
+        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(InputViewController.handleSwipes(_:)))
+        swipeDown.direction = .down
+        view.addGestureRecognizer(swipeDown)
+
     }
 
     override func didReceiveMemoryWarning() {
@@ -60,6 +88,7 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
         // Dispose of any resources that can be recreated.
     }
 
+    
 
 }
 

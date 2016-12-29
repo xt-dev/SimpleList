@@ -10,7 +10,7 @@
         <!--List View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ListViewController" customModule="DueList" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LVC" id="BYZ-38-t0r" customClass="ListViewController" customModule="DueList" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -44,15 +44,15 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" fixedFrame="YES" progressViewStyle="bar" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="S3X-WB-eLc">
-                                                    <frame key="frameInset" minX="43" minY="40" width="290" height="3"/>
+                                                    <frame key="frameInset" minX="43" minY="40.5" width="290" height="2.5"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <rect key="contentStretch" x="0.0" y="1" width="1" height="1"/>
                                                 </progressView>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="bar" destination="kjh-vA-OXH" id="YQK-B4-kVm"/>
                                             <outlet property="nameLabel" destination="DNM-Zt-y35" id="T6I-IP-UZI"/>
+                                            <outlet property="progressBar" destination="S3X-WB-eLc" id="zji-Xr-xeg"/>
                                             <outlet property="timeLabel" destination="DYG-hk-g0C" id="StQ-LB-n3d"/>
                                         </connections>
                                     </tableViewCell>
@@ -74,6 +74,14 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SKC-Ko-phB">
+                                <frame key="frameInset" minX="265" minY="32" width="34" height="29"/>
+                                <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="B"/>
+                                <connections>
+                                    <action selector="ChangeView:" destination="BYZ-38-t0r" eventType="touchUpInside" id="WLr-cu-g7L"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -83,10 +91,14 @@
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="6rS-ZL-DnL" secondAttribute="bottom" id="1dH-v0-lF0"/>
                             <constraint firstItem="6rS-ZL-DnL" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="3dJ-rv-58p"/>
                             <constraint firstItem="92J-yt-6Ac" firstAttribute="leading" secondItem="lNE-lk-wmg" secondAttribute="trailing" constant="60" id="5mZ-vX-WvU"/>
+                            <constraint firstItem="SKC-Ko-phB" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="12" id="BBV-YT-hIC"/>
                             <constraint firstItem="6rS-ZL-DnL" firstAttribute="top" secondItem="lNE-lk-wmg" secondAttribute="bottom" constant="8" id="EIG-EM-IAc"/>
                             <constraint firstItem="92J-yt-6Ac" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="Mty-Tt-ewg"/>
                             <constraint firstItem="lNE-lk-wmg" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="PLc-nK-jpy"/>
                             <constraint firstItem="6rS-ZL-DnL" firstAttribute="top" secondItem="lNE-lk-wmg" secondAttribute="bottom" constant="8" id="TFK-t9-WF6"/>
+                            <constraint firstItem="92J-yt-6Ac" firstAttribute="leading" secondItem="SKC-Ko-phB" secondAttribute="trailing" constant="18" id="WK4-dU-gIh"/>
+                            <constraint firstItem="SKC-Ko-phB" firstAttribute="leading" secondItem="lNE-lk-wmg" secondAttribute="trailing" constant="8" id="feL-iu-DGI"/>
+                            <constraint firstItem="6rS-ZL-DnL" firstAttribute="top" secondItem="SKC-Ko-phB" secondAttribute="bottom" constant="21.5" id="ge6-0h-8Kf"/>
                             <constraint firstItem="92J-yt-6Ac" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="17" id="oJr-wT-fbZ"/>
                             <constraint firstAttribute="trailingMargin" secondItem="lNE-lk-wmg" secondAttribute="trailing" constant="102" id="qlx-52-wSq"/>
                         </constraints>
@@ -103,7 +115,7 @@
         <!--Input View Controller-->
         <scene sceneID="XIB-ju-UfC">
             <objects>
-                <viewController id="pj1-Sv-e1C" customClass="InputViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="IVC" id="pj1-Sv-e1C" customClass="InputViewController" customModule="DueList" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="UWQ-Vf-dgp"/>
                         <viewControllerLayoutGuide type="bottom" id="mnk-Cb-88F"/>
@@ -111,12 +123,50 @@
                     <view key="view" contentMode="scaleToFill" id="uGE-xU-ks7">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add A new Due" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vMs-kO-POv">
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="what's up to do" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="sdB-ee-aRV">
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" enablesReturnKeyAutomatically="YES"/>
+                            </textField>
+                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="qma-Ug-TX4">
+                                <date key="date" timeIntervalSinceReferenceDate="504657126.77756202">
+                                    <!--2016-12-28 22:32:06 +0000-->
+                                </date>
+                            </datePicker>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="qma-Ug-TX4" firstAttribute="leading" secondItem="uGE-xU-ks7" secondAttribute="leading" id="0nG-ez-DI8"/>
+                            <constraint firstItem="vMs-kO-POv" firstAttribute="top" secondItem="UWQ-Vf-dgp" secondAttribute="bottom" constant="15" id="286-Uj-GCh"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="sdB-ee-aRV" secondAttribute="trailing" constant="28" id="4NU-rO-UPL"/>
+                            <constraint firstItem="vMs-kO-POv" firstAttribute="leading" secondItem="uGE-xU-ks7" secondAttribute="leading" id="Dyp-e0-olo"/>
+                            <constraint firstItem="mnk-Cb-88F" firstAttribute="top" secondItem="sdB-ee-aRV" secondAttribute="bottom" constant="555" id="EqG-OT-Nyp"/>
+                            <constraint firstItem="sdB-ee-aRV" firstAttribute="top" secondItem="vMs-kO-POv" secondAttribute="bottom" constant="26" id="I6J-lF-yJ9"/>
+                            <constraint firstAttribute="trailing" secondItem="vMs-kO-POv" secondAttribute="trailing" id="RQI-7d-sM6"/>
+                            <constraint firstItem="sdB-ee-aRV" firstAttribute="leading" secondItem="uGE-xU-ks7" secondAttribute="leadingMargin" constant="28" id="TzO-4R-D3q"/>
+                            <constraint firstItem="sdB-ee-aRV" firstAttribute="top" secondItem="vMs-kO-POv" secondAttribute="bottom" constant="26" id="kgR-ig-gve"/>
+                            <constraint firstItem="qma-Ug-TX4" firstAttribute="top" secondItem="sdB-ee-aRV" secondAttribute="bottom" constant="8" id="nSX-cF-YUe"/>
+                            <constraint firstItem="mnk-Cb-88F" firstAttribute="top" secondItem="qma-Ug-TX4" secondAttribute="bottom" constant="331" id="nbJ-si-GXB"/>
+                            <constraint firstAttribute="trailing" secondItem="qma-Ug-TX4" secondAttribute="trailing" id="uJ9-nk-ToK"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="dateInput" destination="qma-Ug-TX4" id="9en-Z1-tSw"/>
+                        <outlet property="input" destination="sdB-ee-aRV" id="6Kd-Rx-zkc"/>
+                        <segue destination="BYZ-38-t0r" kind="presentation" id="9b7-4E-wZQ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mHP-Bd-rGr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="738" y="41"/>
+            <point key="canvasLocation" x="736.79999999999995" y="40.929535232383813"/>
         </scene>
     </scenes>
 </document>
