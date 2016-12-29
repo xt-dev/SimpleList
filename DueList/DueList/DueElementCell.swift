@@ -12,5 +12,6 @@ class DueElementCell: UITableViewCell{
     @IBOutlet weak var progressBar: UIProgressView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
+    @IBOutlet weak var dueDateLabel: UILabel!
 }
 

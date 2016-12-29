@@ -24,7 +24,23 @@ class InputViewController: UIViewController {
                 //declare a new DueElement object
                 let date = dateInput.date
                 let cur_dueElement = DueElement(dueName: input.text!, month: dateInput.calendar.component(.month, from: date as Date), date: dateInput.calendar.component(.day, from: date as Date), hour: dateInput.calendar.component(.hour, from: date as Date))
-                list.append(cur_dueElement)
+                /*Sort Start*/
+                if dueList.isEmpty{
+                    dueList.insert(cur_dueElement, at:0)
+                }else{
+                    var insertEnd = true
+                    for i in 0...dueList.count-1{
+                        if(cur_dueElement.timeLeft! < dueList[i].timeLeft!){
+                            dueList.insert(cur_dueElement, at: i)
+                            insertEnd = false
+                            break
+                        }
+                    }
+                    if(insertEnd){
+                        dueList.append(cur_dueElement)
+                    }
+                }
+                /*Sort End*/
                 input.text = ""
             }
             else
