@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		572B8F211E14817C0081ACD9 /* dueProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 572B8F201E14817C0081ACD9 /* dueProgressView.swift */; };
+		574FF49F1E11F4770096A78F /* DueElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 574FF49E1E11F4770096A78F /* DueElement.swift */; };
 		B88A76D21E0F33D1003B269A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88A76D11E0F33D1003B269A /* AppDelegate.swift */; };
 		B88A76D41E0F33D1003B269A /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88A76D31E0F33D1003B269A /* ListViewController.swift */; };
 		B88A76D71E0F33D1003B269A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B88A76D51E0F33D1003B269A /* Main.storyboard */; };
@@ -16,7 +18,6 @@
 		B88A76F21E0F33D1003B269A /* DueListUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88A76F11E0F33D1003B269A /* DueListUITests.swift */; };
 		B88A77001E0F342E003B269A /* InputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88A76FF1E0F342E003B269A /* InputViewController.swift */; };
 		B88A77021E0F3678003B269A /* DueElementCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88A77011E0F3678003B269A /* DueElementCell.swift */; };
-		B8A7926A1E144FE700CF884C /* DueElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A792691E144FE700CF884C /* DueElement.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,6 +38,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		572B8F201E14817C0081ACD9 /* dueProgressView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = dueProgressView.swift; sourceTree = "<group>"; };
+		574FF49E1E11F4770096A78F /* DueElement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DueElement.swift; sourceTree = "<group>"; };
 		B88A76CE1E0F33D1003B269A /* DueList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DueList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B88A76D11E0F33D1003B269A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B88A76D31E0F33D1003B269A /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
@@ -52,7 +55,6 @@
 		B88A76F31E0F33D1003B269A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B88A76FF1E0F342E003B269A /* InputViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputViewController.swift; sourceTree = "<group>"; };
 		B88A77011E0F3678003B269A /* DueElementCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DueElementCell.swift; sourceTree = "<group>"; };
-		B8A792691E144FE700CF884C /* DueElement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DueElement.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,10 +82,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		574FF49D1E11F45F0096A78F /* model */ = {
+			isa = PBXGroup;
+			children = (
+				574FF49E1E11F4770096A78F /* DueElement.swift */,
+			);
+			name = model;
+			sourceTree = "<group>";
+		};
 		B88A76C51E0F33D1003B269A = {
 			isa = PBXGroup;
 			children = (
-				B8A792681E144F2400CF884C /* Model */,
+				574FF49D1E11F45F0096A78F /* model */,
 				B88A76D01E0F33D1003B269A /* DueList */,
 				B88A76E51E0F33D1003B269A /* DueListTests */,
 				B88A76F01E0F33D1003B269A /* DueListUITests */,
@@ -112,6 +122,7 @@
 				B88A76DD1E0F33D1003B269A /* Info.plist */,
 				B88A76FF1E0F342E003B269A /* InputViewController.swift */,
 				B88A77011E0F3678003B269A /* DueElementCell.swift */,
+				572B8F201E14817C0081ACD9 /* dueProgressView.swift */,
 			);
 			path = DueList;
 			sourceTree = "<group>";
@@ -132,14 +143,6 @@
 				B88A76F31E0F33D1003B269A /* Info.plist */,
 			);
 			path = DueListUITests;
-			sourceTree = "<group>";
-		};
-		B8A792681E144F2400CF884C /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				B8A792691E144FE700CF884C /* DueElement.swift */,
-			);
-			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -280,9 +283,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				B88A77001E0F342E003B269A /* InputViewController.swift in Sources */,
+				572B8F211E14817C0081ACD9 /* dueProgressView.swift in Sources */,
 				B88A76D41E0F33D1003B269A /* ListViewController.swift in Sources */,
 				B88A76D21E0F33D1003B269A /* AppDelegate.swift in Sources */,
-				B8A7926A1E144FE700CF884C /* DueElement.swift in Sources */,
+				574FF49F1E11F4770096A78F /* DueElement.swift in Sources */,
 				B88A77021E0F3678003B269A /* DueElementCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
