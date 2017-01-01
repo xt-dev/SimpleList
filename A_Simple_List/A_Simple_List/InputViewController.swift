@@ -11,10 +11,28 @@ import UIKit
 
 class InputViewController: UIViewController{
     
+    //TODO: Handle swipe with larger area
+    
+    func handleSwipes(_ sender : UISwipeGestureRecognizer){
+        if(sender.direction == .up){
+            print("check!")
+            let secondViewController = self.storyboard?.instantiateViewController(withIdentifier: "LVC")
+            self.present(secondViewController!, animated: true, completion: nil)
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         print("Checkpoint")
         // Do any additional setup after loading the view, typically from a nib.
+        let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(self.handleSwipes(_:)))
+        swipeUp.direction = .up
+        view.addGestureRecognizer(swipeUp)
+        
+
     }
     
     override func didReceiveMemoryWarning() {

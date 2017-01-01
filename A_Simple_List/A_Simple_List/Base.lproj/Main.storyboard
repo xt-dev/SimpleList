@@ -22,7 +22,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="81" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="mtW-YR-Gnq">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="81" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="mtW-YR-Gnq">
                                 <rect key="frame" x="0.0" y="104" width="375" height="563"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
@@ -109,6 +109,7 @@
                                 </state>
                                 <connections>
                                     <action selector="PersonalInfoViewButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="zq9-bl-X1c"/>
+                                    <segue destination="aCT-b2-LGX" kind="presentation" id="fa3-e3-Lis"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xZQ-pY-Ida">
@@ -187,31 +188,40 @@
                                 </state>
                                 <connections>
                                     <action selector="ArchiveViewButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="UJp-Qi-RgZ"/>
+                                    <segue destination="g5I-xy-tlE" kind="unwind" unwindAction="unwindToHomeWithSegue:" id="mRy-1a-Fay"/>
                                 </connections>
                             </button>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Type something" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="MkO-Jw-x6D">
+                                <rect key="frame" x="39" y="81" width="301" height="30"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="MkO-Jw-x6D" secondAttribute="trailing" constant="19" id="94d-oK-OGo"/>
                             <constraint firstItem="hhO-BN-fBq" firstAttribute="leading" secondItem="e19-CH-pfV" secondAttribute="trailing" constant="39" id="GTT-m5-xZo"/>
+                            <constraint firstItem="lgD-0B-a96" firstAttribute="top" secondItem="MkO-Jw-x6D" secondAttribute="bottom" constant="556" id="HgK-Dd-Cdn"/>
                             <constraint firstItem="e9Z-zZ-mkH" firstAttribute="leading" secondItem="gZW-60-PhS" secondAttribute="leadingMargin" constant="61" id="MPk-Av-hzP"/>
                             <constraint firstItem="lgD-0B-a96" firstAttribute="top" secondItem="hhO-BN-fBq" secondAttribute="bottom" constant="609" id="N66-zY-9c6"/>
                             <constraint firstAttribute="trailingMargin" secondItem="hhO-BN-fBq" secondAttribute="trailing" constant="61" id="NSA-eg-Oox"/>
                             <constraint firstItem="e19-CH-pfV" firstAttribute="leading" secondItem="e9Z-zZ-mkH" secondAttribute="trailing" constant="44" id="cz4-aO-USR"/>
                             <constraint firstItem="e9Z-zZ-mkH" firstAttribute="top" secondItem="kOa-vM-f6B" secondAttribute="bottom" constant="8" id="d2G-lK-jB7"/>
+                            <constraint firstItem="MkO-Jw-x6D" firstAttribute="leading" secondItem="gZW-60-PhS" secondAttribute="leadingMargin" constant="23" id="ihU-kp-KuI"/>
                             <constraint firstItem="hhO-BN-fBq" firstAttribute="top" secondItem="kOa-vM-f6B" secondAttribute="bottom" constant="8" id="jUO-pK-8IO"/>
+                            <constraint firstItem="MkO-Jw-x6D" firstAttribute="top" secondItem="hhO-BN-fBq" secondAttribute="bottom" constant="23" id="mRp-Vj-eJX"/>
                             <constraint firstItem="e19-CH-pfV" firstAttribute="baseline" secondItem="hhO-BN-fBq" secondAttribute="baseline" id="re9-sD-bHF"/>
                             <constraint firstItem="e19-CH-pfV" firstAttribute="leading" secondItem="e9Z-zZ-mkH" secondAttribute="trailing" constant="44" id="wXP-ne-ryh"/>
                             <constraint firstItem="lgD-0B-a96" firstAttribute="top" secondItem="e9Z-zZ-mkH" secondAttribute="bottom" constant="609" id="xcI-v7-v50"/>
                             <constraint firstItem="hhO-BN-fBq" firstAttribute="leading" secondItem="e19-CH-pfV" secondAttribute="trailing" constant="39" id="z6v-IG-Tfy"/>
                         </constraints>
                     </view>
-                    <connections>
-                        <segue destination="BYZ-38-t0r" kind="show" id="u0k-Q9-fgg"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ppO-cc-owj" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="g5I-xy-tlE" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="649" y="123"/>
+            <point key="canvasLocation" x="648.79999999999995" y="122.78860569715144"/>
         </scene>
     </scenes>
 </document>

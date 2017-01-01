@@ -8,8 +8,9 @@
 
 import Foundation
 import UIKit
+import MCSwipeTableViewCell
 
-class DueElementCell: UITableViewCell{
+class DueElementCell: MCSwipeTableViewCell{
     @IBOutlet weak var DueDateLabel: UILabel!
     @IBOutlet weak var DueNameLabel: UILabel!
     @IBOutlet weak var TimeLeftLabel: UILabel!
