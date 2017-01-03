@@ -8,6 +8,9 @@
 
 import UIKit
 import Foundation
+import UserNotifications
+import UserNotificationsUI
+
 
 
 var dueList = [DueElement(dueName: "CS225 MP", dueDate: time(year: 2017, month: 1, date: 1, hour: 21, minute: 30), createdDate: time(year: 2016, month: 12, date: 30, hour: 10, minute: 00)), DueElement(dueName: "ECON471 HW", dueDate: time(year: 2016, month: 12, date: 31, hour: 21, minute: 30), createdDate: time(year: 2016, month: 12, date: 29, hour: 12, minute: 30)), DueElement(dueName: "IOS Coding", dueDate: time(year: 2017, month: 1, date: 2, hour: 19, minute: 30), createdDate: time(year: 2016, month: 12, date: 30, hour: 21, minute: 30))]
@@ -28,6 +31,63 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     var viewTransitionManager = ViewTransitionManager()
+    
+    let requestIdentifier = "SampleRequest"//request element
+    
+    //Shake detection
+    //detect shake motion and send alert
+    override var canBecomeFirstResponder: Bool {
+        return true
+    }
+    
+    override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
+        if motion == .motionShake {
+            let alertController = UIAlertController(title: "Hey Nigga", message: "What do you want to do?", preferredStyle: .alert)
+            
+            let defaultAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+            alertController.addAction(defaultAction)
+            
+            present(alertController, animated: true, completion: nil)
+        }
+    }
+    
+    //notification setup
+    func notify(){
+        print("Change View button clicked")
+        print("notification will be triggered in five seconds..Hold on tight")
+        let content = UNMutableNotificationContent()
+        content.title = "Intro to Notifications"
+        content.subtitle = "Lets code,Talk is cheap"
+        content.body = "Sample code from WWDC"
+        content.sound = UNNotificationSound.default()
+        
+        //To Present image in notification
+        if let path = Bundle.main.path(forResource: "monkey", ofType: "png") {
+            let url = URL(fileURLWithPath: path)
+            
+            do {
+                let attachment = try UNNotificationAttachment(identifier: "sampleImage", url: url, options: nil)
+                content.attachments = [attachment]
+            } catch {
+                print("attachment not found.")
+            }
+        }
+        
+        // Deliver the notification in five seconds.
+        let trigger = UNTimeIntervalNotificationTrigger.init(timeInterval: 5.0, repeats: false)
+        let request = UNNotificationRequest(identifier:requestIdentifier, content: content, trigger: trigger)
+        
+        UNUserNotificationCenter.current().delegate = self
+        
+        UNUserNotificationCenter.current().add(request){(error) in
+            
+            if (error != nil){
+                
+                print(error?.localizedDescription)
+            }
+        }
+        
+    }
     
     //Pan Gesture
     func createPanGestureRecognizer(targetView: UIView)
@@ -120,6 +180,7 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        //notify(); //called notify function
         let InputViewController = segue.destination as! InputViewController
         InputViewController.transitioningDelegate = self.viewTransitionManager
     }
@@ -152,21 +213,31 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         cell.separatorInset = UIEdgeInsets.zero
         cell.layoutMargins = UIEdgeInsets.zero
         cell.selectionStyle = .none
-        cell.defaultColor = UIColor(netHex:0x1ABC9C, isLargerAlpha: 1)
+        cell.defaultColor = UIColor(netHex:0xfaf8f8, isLargerAlpha: 1)
         cell.firstTrigger = 0.25;
-        cell.secondTrigger = 0.50;
+        cell.secondTrigger = 0.45;
         
         
         //add Listener
-        cell.setSwipeGestureWith(UIImageView(image: UIImage(named: "check")!), color: UIColor(netHex:0x1ABC9C, isLargerAlpha: 1), mode: .exit, state: .state1, completionBlock: { (cell, state, mode) -> Void in
+        cell.setSwipeGestureWith(UIImageView(image: UIImage(named: "check")!), color: UIColor(netHex:0x1ABC9C, isLargerAlpha: 0.7), mode: .switch, state: .state1, completionBlock: { (cell, state, mode) -> Void in
+        })
+        
+        cell.setSwipeGestureWith(UIImageView(image: UIImage(named: "check")!), color: UIColor(netHex:0x1ABC9C, isLargerAlpha: 0.7), mode: .exit, state: .state2, completionBlock: { (cell, state, mode) -> Void in
             
-            dueList.remove(at: indexPath.row)
+            dueList.remove(at: indexPath.row)//potential bug
             self.DueListView.reloadData()
+        })
+        
+        cell.setSwipeGestureWith(UIImageView(image: UIImage(named: "cross")!), color:  UIColor(netHex:0xEC644B, isLargerAlpha: 0.7), mode: .switch, state: .state3, completionBlock: { (cell, state, mode) -> Void in
+            
             
         })
-        cell.setSwipeGestureWith(UIImageView(image: UIImage(named: "cross")!), color:  UIColor(netHex:0xEC644B, isLargerAlpha: 1), mode: .exit, state: .state3, completionBlock: { (cell, state, mode) -> Void in
-            dueList.remove(at: indexPath.row)
+        
+        cell.setSwipeGestureWith(UIImageView(image: UIImage(named: "cross")!), color: UIColor(netHex:0xEC644B, isLargerAlpha: 0.7), mode: .exit, state: .state4, completionBlock: { (cell, state, mode) -> Void in
+            
+            dueList.remove(at: indexPath.row)//potential bug
             self.DueListView.reloadData()
+            
         })
 
         
@@ -217,3 +288,27 @@ extension UIColor {
         self.init(red:(netHex >> 16) & 0xff, green:(netHex >> 8) & 0xff, blue:netHex & 0xff, isLargerAlpha: isLargerAlpha)
     }
 }
+
+extension ListViewController:UNUserNotificationCenterDelegate{
+    
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        
+        print("Tapped in notification")
+    }
+    
+    //This is key callback to present notification while the app is in foreground
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        
+        print("Notification being triggered")
+        //You can either present alert ,sound or increase badge while the app is in foreground too with ios 10
+        //to distinguish between notifications
+        if notification.request.identifier == requestIdentifier{
+            
+            completionHandler( [.alert,.sound,.badge])
+            
+        }
+    }
+}
+
+

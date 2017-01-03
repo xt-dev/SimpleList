@@ -163,7 +163,9 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         self.contentView.backgroundColor = isBackgroundClear ? [UIColor whiteColor] :self.backgroundColor;
     }
     
+    
     UIImage *contentViewScreenshotImage = [self imageWithView:self];
+    
     
     if (isContentViewBackgroundClear) {
         self.contentView.backgroundColor = nil;
@@ -172,14 +174,16 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     _colorIndicatorView = [[UIView alloc] initWithFrame:self.bounds];
     _colorIndicatorView.autoresizingMask = (UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth);
     _colorIndicatorView.backgroundColor = self.defaultColor ? self.defaultColor : [UIColor clearColor];
-    [self addSubview:_colorIndicatorView];
+    [self addSubview:_colorIndicatorView];//颜色层
     
     _slidingView = [[UIView alloc] init];
     _slidingView.contentMode = UIViewContentModeCenter;
-    [_colorIndicatorView addSubview:_slidingView];
+    [_colorIndicatorView addSubview:_slidingView];//图标层
     
     _contentScreenshotView = [[UIImageView alloc] initWithImage:contentViewScreenshotImage];
-    [self addSubview:_contentScreenshotView];
+    [self addSubview:_contentScreenshotView];//最上面screenshot层
+    
+    
 }
 
 - (void)uninstallSwipingView {
@@ -195,6 +199,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     
     [_contentScreenshotView removeFromSuperview];
     _contentScreenshotView = nil;
+    
 }
 
 - (void)setViewOfSlidingView:(UIView *)slidingView {
@@ -241,6 +246,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         _view3 = view;
         _color3 = color;
         _modeForState3 = mode;
+        
     }
     
     if ((state & MCSwipeTableViewCellState4) == MCSwipeTableViewCellState4) {
@@ -280,6 +286,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         if ([_delegate respondsToSelector:@selector(swipeTableViewCell:didSwipeWithPercentage:)]) {
             [_delegate swipeTableViewCell:self didSwipeWithPercentage:percentage];
         }
+        
     }
     
     else if (state == UIGestureRecognizerStateEnded || state == UIGestureRecognizerStateCancelled) {
@@ -321,6 +328,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         if ([_delegate respondsToSelector:@selector(swipeTableViewCellDidEndSwiping:)]) {
             [_delegate swipeTableViewCellDidEndSwiping:self];
         }
+        
     }
 }
 
@@ -475,7 +483,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         state = MCSwipeTableViewCellState1;
     }
     
-    if (percentage >= _secondTrigger && _modeForState2) {
+    if (percentage >= 0.6 && _modeForState2) { //set delete action to begin at 0.7 position
         state = MCSwipeTableViewCellState2;
     }
     
@@ -483,7 +491,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         state = MCSwipeTableViewCellState3;
     }
     
-    if (percentage <= -_secondTrigger && _modeForState4) {
+    if (percentage <= - 0.6 && _modeForState4) { //set delete action to begin at 0.7 postion
         state = MCSwipeTableViewCellState4;
     }
     
@@ -509,6 +517,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     if (color != nil) {
         _colorIndicatorView.backgroundColor = color;
     }
+    
 }
 
 - (void)slideViewWithPercentage:(CGFloat)percentage view:(UIView *)view isDragging:(BOOL)isDragging {
@@ -565,7 +574,6 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     
     _isExited = YES;
     CGFloat origin;
-    
     if (direction == MCSwipeTableViewCellDirectionLeft) {
         origin = -CGRectGetWidth(self.bounds);
     }
@@ -598,7 +606,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
 }
 
 - (void)swipeToOriginWithCompletion:(void(^)(void))completion {
-    CGFloat bounceDistance = kMCBounceAmplitude * _currentPercentage;
+    CGFloat bounceDistance = 0;
     
     if ([UIView.class respondsToSelector:@selector(animateWithDuration:delay:usingSpringWithDamping:initialSpringVelocity:options:animations:completion:)]) {
         

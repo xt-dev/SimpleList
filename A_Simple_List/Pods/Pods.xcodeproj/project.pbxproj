@@ -35,21 +35,21 @@
 		1A288CF791D1790AB7F1A4F7AEA29396 /* MCSwipeTableViewCell.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MCSwipeTableViewCell.h; path = MCSwipeTableViewCell/MCSwipeTableViewCell.h; sourceTree = "<group>"; };
 		23E932227D0C0C6674337C5BA26175B3 /* MCSwipeTableViewCell-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "MCSwipeTableViewCell-umbrella.h"; sourceTree = "<group>"; };
 		3B44B3067F28A334FD6E999931009AAE /* Pods-A_Simple_List-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-A_Simple_List-acknowledgements.markdown"; sourceTree = "<group>"; };
-		4F760971E5548C2078143EF107505F78 /* Pods_A_Simple_List.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_A_Simple_List.framework; path = "Pods-A_Simple_List.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4F760971E5548C2078143EF107505F78 /* Pods_A_Simple_List.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_A_Simple_List.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E1F903398CE778F2A4F83DB489A16D9 /* Pods-A_Simple_List.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-A_Simple_List.debug.xcconfig"; sourceTree = "<group>"; };
 		5F2E96F928D4EFB03A4F06E5A4E1F849 /* MCSwipeTableViewCell.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MCSwipeTableViewCell.m; path = MCSwipeTableViewCell/MCSwipeTableViewCell.m; sourceTree = "<group>"; };
 		616F64E32A0D7FFF34D2553365BAB002 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6DD5B302267666A730A3E4CFD9DF8938 /* MCSwipeTableViewCell.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = MCSwipeTableViewCell.xcconfig; sourceTree = "<group>"; };
 		777431397AA193F93033104F6E7038A8 /* Pods-A_Simple_List-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-A_Simple_List-resources.sh"; sourceTree = "<group>"; };
-		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		99FCD7AFF2DFAE6EE8E912330694063B /* MCSwipeTableViewCell.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = MCSwipeTableViewCell.framework; path = MCSwipeTableViewCell.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		A7B0FBC93761A6026B2298BEC0641F9D /* Pods-A_Simple_List.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = "Pods-A_Simple_List.modulemap"; sourceTree = "<group>"; };
+		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		99FCD7AFF2DFAE6EE8E912330694063B /* MCSwipeTableViewCell.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MCSwipeTableViewCell.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A7B0FBC93761A6026B2298BEC0641F9D /* Pods-A_Simple_List.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-A_Simple_List.modulemap"; sourceTree = "<group>"; };
 		A9CEF6F4201390203D72F212028CF947 /* Pods-A_Simple_List-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-A_Simple_List-acknowledgements.plist"; sourceTree = "<group>"; };
 		B374B7F55FB81B22CBC29926AB454D0C /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CBB3DE36805AF21409EC968A9691732F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		D0AD47D02C81EBBC46E5EF154E8DFE47 /* Pods-A_Simple_List.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-A_Simple_List.release.xcconfig"; sourceTree = "<group>"; };
 		E3E1226D6E61609BE9693D07932D7D66 /* MCSwipeTableViewCell-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "MCSwipeTableViewCell-prefix.pch"; sourceTree = "<group>"; };
-		F83C0B79F54ADE5537739B516F4893F9 /* MCSwipeTableViewCell.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = MCSwipeTableViewCell.modulemap; sourceTree = "<group>"; };
+		F83C0B79F54ADE5537739B516F4893F9 /* MCSwipeTableViewCell.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = MCSwipeTableViewCell.modulemap; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,7 +87,6 @@
 				5F2E96F928D4EFB03A4F06E5A4E1F849 /* MCSwipeTableViewCell.m */,
 				9E99EF890AAB9311DC1C5421616B0C43 /* Support Files */,
 			);
-			name = MCSwipeTableViewCell;
 			path = MCSwipeTableViewCell;
 			sourceTree = "<group>";
 		};

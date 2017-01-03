@@ -19,6 +19,7 @@
 		B821D3981E18DCC000F72404 /* check.png in Resources */ = {isa = PBXBuildFile; fileRef = B821D3971E18DCC000F72404 /* check.png */; };
 		B821D39A1E18DCCB00F72404 /* cross.png in Resources */ = {isa = PBXBuildFile; fileRef = B821D3991E18DCCB00F72404 /* cross.png */; };
 		B821D39C1E19D59F00F72404 /* InputHint.png in Resources */ = {isa = PBXBuildFile; fileRef = B821D39B1E19D59F00F72404 /* InputHint.png */; };
+		B87279641E1C5A7400167E4C /* ArchiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87279631E1C5A7400167E4C /* ArchiveViewController.swift */; };
 		C79E2A16BE34B7F450755F48 /* Pods_A_Simple_List.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62AD27CDB70AFC499F7D8459 /* Pods_A_Simple_List.framework */; };
 /* End PBXBuildFile section */
 
@@ -38,6 +39,7 @@
 		B821D3971E18DCC000F72404 /* check.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check.png; sourceTree = "<group>"; };
 		B821D3991E18DCCB00F72404 /* cross.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cross.png; sourceTree = "<group>"; };
 		B821D39B1E19D59F00F72404 /* InputHint.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = InputHint.png; sourceTree = "<group>"; };
+		B87279631E1C5A7400167E4C /* ArchiveViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArchiveViewController.swift; sourceTree = "<group>"; };
 		C7C3141A94D66E68E0EB2CCD /* Pods-A_Simple_List.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-A_Simple_List.release.xcconfig"; path = "Pods/Target Support Files/Pods-A_Simple_List/Pods-A_Simple_List.release.xcconfig"; sourceTree = "<group>"; };
 		CE58E2D2B1CDC2B53C617008 /* Pods-A_Simple_List.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-A_Simple_List.debug.xcconfig"; path = "Pods/Target Support Files/Pods-A_Simple_List/Pods-A_Simple_List.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -105,6 +107,7 @@
 				B821D37E1E1862A000F72404 /* LaunchScreen.storyboard */,
 				B821D3811E1862A000F72404 /* Info.plist */,
 				B821D3951E18ABE600F72404 /* ViewTransitionManager.swift */,
+				B87279631E1C5A7400167E4C /* ArchiveViewController.swift */,
 			);
 			path = A_Simple_List;
 			sourceTree = "<group>";
@@ -242,6 +245,7 @@
 				B821D3961E18ABE600F72404 /* ViewTransitionManager.swift in Sources */,
 				B821D3761E1862A000F72404 /* AppDelegate.swift in Sources */,
 				B821D38A1E18641A00F72404 /* DueElementCell.swift in Sources */,
+				B87279641E1C5A7400167E4C /* ArchiveViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
