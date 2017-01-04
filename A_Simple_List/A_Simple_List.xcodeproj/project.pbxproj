@@ -20,6 +20,14 @@
 		B821D39A1E18DCCB00F72404 /* cross.png in Resources */ = {isa = PBXBuildFile; fileRef = B821D3991E18DCCB00F72404 /* cross.png */; };
 		B821D39C1E19D59F00F72404 /* InputHint.png in Resources */ = {isa = PBXBuildFile; fileRef = B821D39B1E19D59F00F72404 /* InputHint.png */; };
 		B87279641E1C5A7400167E4C /* ArchiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87279631E1C5A7400167E4C /* ArchiveViewController.swift */; };
+		B885DB5C1E1C60B600CEB1AA /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B885DB5B1E1C60B600CEB1AA /* Extension.swift */; };
+		B885DB631E1C641500CEB1AA /* 黑色箭头.png in Resources */ = {isa = PBXBuildFile; fileRef = B885DB601E1C641500CEB1AA /* 黑色箭头.png */; };
+		B885DB641E1C641500CEB1AA /* 黄色箭头.png in Resources */ = {isa = PBXBuildFile; fileRef = B885DB611E1C641500CEB1AA /* 黄色箭头.png */; };
+		B885DB671E1C66AE00CEB1AA /* 绿色箭头.png in Resources */ = {isa = PBXBuildFile; fileRef = B885DB661E1C66AE00CEB1AA /* 绿色箭头.png */; };
+		B885DB691E1C67D100CEB1AA /* 红色箭头.png in Resources */ = {isa = PBXBuildFile; fileRef = B885DB681E1C67D100CEB1AA /* 红色箭头.png */; };
+		B885DB6C1E1C6ACE00CEB1AA /* 红色箭头2.png in Resources */ = {isa = PBXBuildFile; fileRef = B885DB6A1E1C6ACE00CEB1AA /* 红色箭头2.png */; };
+		B885DB6D1E1C6ACE00CEB1AA /* 绿色箭头2.png in Resources */ = {isa = PBXBuildFile; fileRef = B885DB6B1E1C6ACE00CEB1AA /* 绿色箭头2.png */; };
+		B885DB711E1C9B4500CEB1AA /* ArchiveElementCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B885DB701E1C9B4500CEB1AA /* ArchiveElementCell.swift */; };
 		C79E2A16BE34B7F450755F48 /* Pods_A_Simple_List.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62AD27CDB70AFC499F7D8459 /* Pods_A_Simple_List.framework */; };
 /* End PBXBuildFile section */
 
@@ -40,6 +48,14 @@
 		B821D3991E18DCCB00F72404 /* cross.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cross.png; sourceTree = "<group>"; };
 		B821D39B1E19D59F00F72404 /* InputHint.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = InputHint.png; sourceTree = "<group>"; };
 		B87279631E1C5A7400167E4C /* ArchiveViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArchiveViewController.swift; sourceTree = "<group>"; };
+		B885DB5B1E1C60B600CEB1AA /* Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
+		B885DB601E1C641500CEB1AA /* 黑色箭头.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "黑色箭头.png"; sourceTree = "<group>"; };
+		B885DB611E1C641500CEB1AA /* 黄色箭头.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "黄色箭头.png"; sourceTree = "<group>"; };
+		B885DB661E1C66AE00CEB1AA /* 绿色箭头.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "绿色箭头.png"; sourceTree = "<group>"; };
+		B885DB681E1C67D100CEB1AA /* 红色箭头.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "红色箭头.png"; sourceTree = "<group>"; };
+		B885DB6A1E1C6ACE00CEB1AA /* 红色箭头2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "红色箭头2.png"; sourceTree = "<group>"; };
+		B885DB6B1E1C6ACE00CEB1AA /* 绿色箭头2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "绿色箭头2.png"; sourceTree = "<group>"; };
+		B885DB701E1C9B4500CEB1AA /* ArchiveElementCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArchiveElementCell.swift; sourceTree = "<group>"; };
 		C7C3141A94D66E68E0EB2CCD /* Pods-A_Simple_List.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-A_Simple_List.release.xcconfig"; path = "Pods/Target Support Files/Pods-A_Simple_List/Pods-A_Simple_List.release.xcconfig"; sourceTree = "<group>"; };
 		CE58E2D2B1CDC2B53C617008 /* Pods-A_Simple_List.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-A_Simple_List.debug.xcconfig"; path = "Pods/Target Support Files/Pods-A_Simple_List/Pods-A_Simple_List.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -94,9 +110,7 @@
 		B821D3741E1862A000F72404 /* A_Simple_List */ = {
 			isa = PBXGroup;
 			children = (
-				B821D39B1E19D59F00F72404 /* InputHint.png */,
-				B821D3991E18DCCB00F72404 /* cross.png */,
-				B821D3971E18DCC000F72404 /* check.png */,
+				B885DB5D1E1C63F000CEB1AA /* 图片 */,
 				B821D3751E1862A000F72404 /* AppDelegate.swift */,
 				B821D3771E1862A000F72404 /* ListViewController.swift */,
 				B821D38B1E18682400F72404 /* InputViewController.swift */,
@@ -108,8 +122,26 @@
 				B821D3811E1862A000F72404 /* Info.plist */,
 				B821D3951E18ABE600F72404 /* ViewTransitionManager.swift */,
 				B87279631E1C5A7400167E4C /* ArchiveViewController.swift */,
+				B885DB701E1C9B4500CEB1AA /* ArchiveElementCell.swift */,
+				B885DB5B1E1C60B600CEB1AA /* Extension.swift */,
 			);
 			path = A_Simple_List;
+			sourceTree = "<group>";
+		};
+		B885DB5D1E1C63F000CEB1AA /* 图片 */ = {
+			isa = PBXGroup;
+			children = (
+				B885DB6A1E1C6ACE00CEB1AA /* 红色箭头2.png */,
+				B885DB6B1E1C6ACE00CEB1AA /* 绿色箭头2.png */,
+				B885DB601E1C641500CEB1AA /* 黑色箭头.png */,
+				B885DB661E1C66AE00CEB1AA /* 绿色箭头.png */,
+				B885DB611E1C641500CEB1AA /* 黄色箭头.png */,
+				B885DB681E1C67D100CEB1AA /* 红色箭头.png */,
+				B821D39B1E19D59F00F72404 /* InputHint.png */,
+				B821D3991E18DCCB00F72404 /* cross.png */,
+				B821D3971E18DCC000F72404 /* check.png */,
+			);
+			name = "图片";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -175,12 +207,18 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B885DB6D1E1C6ACE00CEB1AA /* 绿色箭头2.png in Resources */,
+				B885DB691E1C67D100CEB1AA /* 红色箭头.png in Resources */,
 				B821D39A1E18DCCB00F72404 /* cross.png in Resources */,
 				B821D3801E1862A000F72404 /* LaunchScreen.storyboard in Resources */,
 				B821D3981E18DCC000F72404 /* check.png in Resources */,
 				B821D39C1E19D59F00F72404 /* InputHint.png in Resources */,
 				B821D37D1E1862A000F72404 /* Assets.xcassets in Resources */,
 				B821D37B1E1862A000F72404 /* Main.storyboard in Resources */,
+				B885DB671E1C66AE00CEB1AA /* 绿色箭头.png in Resources */,
+				B885DB631E1C641500CEB1AA /* 黑色箭头.png in Resources */,
+				B885DB641E1C641500CEB1AA /* 黄色箭头.png in Resources */,
+				B885DB6C1E1C6ACE00CEB1AA /* 红色箭头2.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -244,8 +282,10 @@
 				B821D3781E1862A000F72404 /* ListViewController.swift in Sources */,
 				B821D3961E18ABE600F72404 /* ViewTransitionManager.swift in Sources */,
 				B821D3761E1862A000F72404 /* AppDelegate.swift in Sources */,
+				B885DB711E1C9B4500CEB1AA /* ArchiveElementCell.swift in Sources */,
 				B821D38A1E18641A00F72404 /* DueElementCell.swift in Sources */,
 				B87279641E1C5A7400167E4C /* ArchiveViewController.swift in Sources */,
+				B885DB5C1E1C60B600CEB1AA /* Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -15,26 +15,33 @@ import UserNotificationsUI
 
 var dueList = [DueElement(dueName: "CS225 MP", dueDate: time(year: 2017, month: 1, date: 1, hour: 21, minute: 30), createdDate: time(year: 2016, month: 12, date: 30, hour: 10, minute: 00)), DueElement(dueName: "ECON471 HW", dueDate: time(year: 2016, month: 12, date: 31, hour: 21, minute: 30), createdDate: time(year: 2016, month: 12, date: 29, hour: 12, minute: 30)), DueElement(dueName: "IOS Coding", dueDate: time(year: 2017, month: 1, date: 2, hour: 19, minute: 30), createdDate: time(year: 2016, month: 12, date: 30, hour: 21, minute: 30))]
 
+
 //var refreshControl: UIRefreshControl!
 //var customView: UIView!
 
-
-class ListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate {
     
     @IBOutlet weak var DueListView: UITableView!
 
     @IBAction func ListViewButton(_ sender: Any) {
     }
     @IBAction func ArchiveViewButton(_ sender: Any) {
+        let secondViewController = self.storyboard?.instantiateViewController(withIdentifier: "AVC")
+        secondViewController?.transitioningDelegate = self.viewTransitionManager
+        self.present(secondViewController!, animated: true, completion: nil)
     }
     @IBAction func PersonalInfoViewButton(_ sender: Any) {
     }
+    
     
     var viewTransitionManager = ViewTransitionManager()
     
     let requestIdentifier = "SampleRequest"//request element
     
-    //Shake detection
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+    
     //detect shake motion and send alert
     override var canBecomeFirstResponder: Bool {
         return true
@@ -76,55 +83,45 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         // Deliver the notification in five seconds.
         let trigger = UNTimeIntervalNotificationTrigger.init(timeInterval: 5.0, repeats: false)
         let request = UNNotificationRequest(identifier:requestIdentifier, content: content, trigger: trigger)
-        
         UNUserNotificationCenter.current().delegate = self
-        
         UNUserNotificationCenter.current().add(request){(error) in
-            
             if (error != nil){
                 
                 print(error?.localizedDescription)
             }
         }
-        
     }
     
     //Pan Gesture
     func createPanGestureRecognizer(targetView: UIView)
     {
         let panGesture = UIPanGestureRecognizer(target: self, action:#selector(self.handlePanGesture(panGesture:)))
+        panGesture.delegate = self
         targetView.addGestureRecognizer(panGesture)
     }
     
-    func gestureRecognizerShouldBegin(gestureRecognizer: UIPanGestureRecognizer) -> Bool {
-        let translation = gestureRecognizer.translation(in: view)
-        let zero: CGPoint = CGPoint(x: 0, y: 0)
-        gestureRecognizer.setTranslation(zero, in: view)
-        let ref: CGFloat? = 30
-        if (translation.y > ref!) { return true}
-        else {return false}
-    }
-    
+    //Pan Gesture Recognizer
     func handlePanGesture(panGesture: UIPanGestureRecognizer) {
-        
-        //        get translation
-        
+        //get translation
+
         let translation = panGesture.translation(in: view)
-//        if translation.dictionaryRepresentation = 
         let zero: CGPoint = CGPoint(x: 0, y: 0)
         panGesture.setTranslation(zero, in: view)
         //let x_loc:CGFloat? = translation.x
         let y_loc:CGFloat? = translation.y
-        let ref : CGFloat? = 30
-        print(translation.y)
-        if (y_loc! > ref!)
+        let ref : CGFloat? = 80
+        if (DueListView.contentOffset.y <= 0)
         {
-            print(">60")
-            let secondViewController = self.storyboard?.instantiateViewController(withIdentifier: "IVC")
-            secondViewController?.transitioningDelegate = self.viewTransitionManager
-            //self.view.isHidden = true
-            self.present(secondViewController!, animated: true, completion: nil)
+            print(translation.y)
+            if (y_loc! > ref!)
+            {
+                print(">80")
+                let secondViewController = self.storyboard?.instantiateViewController(withIdentifier: "IVC")
+                secondViewController?.transitioningDelegate = self.viewTransitionManager
+                self.present(secondViewController!, animated: true, completion: nil)
+            }
         }
+
         //create a new Label and give it the parameters of the old one
         //var label = panGesture.view as! UITableView
         //label.center = CGPoint(x: label.center.x+translation.x, y: label.center.y+translation.y)
@@ -136,36 +133,27 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
             //add something you want to happen when the Label Panning has started
             print("Begin")
         }
-        
         if panGesture.state == UIGestureRecognizerState.ended {
             if (translation.y > 10) { print("?10")}
             //add something you want to happen when the Label Panning has ended
-            
         }
-        
-        
         if panGesture.state == UIGestureRecognizerState.changed {
-            
-            //add something you want to happen when the Label Panning has been change ( during the moving/panning ) 
-            
+            //add something you want to happen when the Label Panning has been change ( during the moving/panning )
         }
-            
         else {
-            
             // or something when its not moving
         }
-        
     }
     
-//TODO: Try to use refreshcontent to triger IPV
-    
-//    func loadCustomRefreshContents() {
-//        let refreshContents = Bundle.main.loadNibNamed("InputViewController", owner: self, options: nil)
-        //customView = refreshContents?[0] as! UIView
-//        customView = DueListView.backgroundView
-//        customView.frame = refreshControl.bounds
-//        refreshControl.addSubview(customView)
-//    }
+    //TODO: Try to use refreshcontent to triger IPV
+        
+    //    func loadCustomRefreshContents() {
+    //        let refreshContents = Bundle.main.loadNibNamed("InputViewController", owner: self, options: nil)
+            //customView = refreshContents?[0] as! UIView
+    //        customView = DueListView.backgroundView
+    //        customView.frame = refreshControl.bounds
+    //        refreshControl.addSubview(customView)
+    //    }
     
     //Swipe Gestures
     func handleSwipes(_ sender : UISwipeGestureRecognizer){
@@ -176,8 +164,6 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
             self.present(secondViewController!, animated: false, completion: nil)
         }
     }
-
-    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         //notify(); //called notify function
@@ -217,12 +203,35 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         cell.firstTrigger = 0.25;
         cell.secondTrigger = 0.45;
         
-        
         //add Listener
         cell.setSwipeGestureWith(UIImageView(image: UIImage(named: "check")!), color: UIColor(netHex:0x1ABC9C, isLargerAlpha: 0.7), mode: .switch, state: .state1, completionBlock: { (cell, state, mode) -> Void in
         })
         
         cell.setSwipeGestureWith(UIImageView(image: UIImage(named: "check")!), color: UIColor(netHex:0x1ABC9C, isLargerAlpha: 0.7), mode: .exit, state: .state2, completionBlock: { (cell, state, mode) -> Void in
+            
+            //register finishDate
+            let date = NSDate()
+            let calender = NSCalendar.current
+            let month = calender.component(.month, from: date as Date)
+            let day = calender.component(.day, from: date as Date)
+            dueList[indexPath.row].finishDate = time(year: nil, month: month, date: day, hour: nil, minute: nil)
+            //swipe right to insert into archiveList; sort through finishDate
+            if archiveList.isEmpty{
+                archiveList.insert(dueList[indexPath.row], at:0)
+            }else{
+                var insertEnd = true
+                for i in 0...archiveList.count-1{
+                    if(dueList[indexPath.row].isLessInFinishDate(element: archiveList[i])){
+                        archiveList.insert(dueList[indexPath.row], at: i)
+                        insertEnd = false
+                        break
+                    }
+                }
+                if(insertEnd){
+                    archiveList.append(dueList[indexPath.row])
+                }
+            }
+            print("insert secceed")
             
             dueList.remove(at: indexPath.row)//potential bug
             self.DueListView.reloadData()
@@ -251,63 +260,24 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(self.handleSwipes(_:)))
         swipeDown.direction = .down
         view.addGestureRecognizer(swipeDown)
-        //DueListView.addGestureRecognizer(swipeDown)
+//        DueListView.addGestureRecognizer(swipeDown)
+
         
         createPanGestureRecognizer(targetView: self.DueListView)
         
-//        refreshControl = UIRefreshControl()
-//        refreshControl.
-//        DueListView.addSubview(refreshControl)
-//        if (refreshControl.isRefreshing == true)
-//        {
-//            print("refresh")
-//        }
-//        loadCustomRefreshContents()
+        //        refreshControl = UIRefreshControl()
+        //        refreshControl.
+        //        DueListView.addSubview(refreshControl)
+        //        if (refreshControl.isRefreshing == true)
+        //        {
+        //            print("refresh")
+        //        }
+        //        loadCustomRefreshContents()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-    }
-
-
-}
-
-
-extension UIColor {
-    convenience init(red: Int, green: Int, blue: Int, isLargerAlpha: Float) {
-        assert(red >= 0 && red <= 255, "Invalid red component")
-        assert(green >= 0 && green <= 255, "Invalid green component")
-        assert(blue >= 0 && blue <= 255, "Invalid blue component")
-        
-        self.init(red: CGFloat(red) / 255.0, green: CGFloat(green) / 255.0, blue: CGFloat(blue) / 255.0, alpha: CGFloat(isLargerAlpha))
-        
-    }
-    
-    convenience init(netHex:Int, isLargerAlpha: Float) {
-        self.init(red:(netHex >> 16) & 0xff, green:(netHex >> 8) & 0xff, blue:netHex & 0xff, isLargerAlpha: isLargerAlpha)
-    }
-}
-
-extension ListViewController:UNUserNotificationCenterDelegate{
-    
-    
-    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        
-        print("Tapped in notification")
-    }
-    
-    //This is key callback to present notification while the app is in foreground
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        
-        print("Notification being triggered")
-        //You can either present alert ,sound or increase badge while the app is in foreground too with ios 10
-        //to distinguish between notifications
-        if notification.request.identifier == requestIdentifier{
-            
-            completionHandler( [.alert,.sound,.badge])
-            
-        }
     }
 }
 
