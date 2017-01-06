@@ -10,12 +10,12 @@
 
 static CGFloat const kMCStop1                       = 0.25; // Percentage limit to trigger the first action
 static CGFloat const kMCStop2                       = 0.75; // Percentage limit to trigger the second action
-static CGFloat const kMCBounceAmplitude             = 20.0; // Maximum bounce amplitude when using the MCSwipeTableViewCellModeSwitch mode
-static CGFloat const kMCDamping                     = 0.6;  // Damping of the spring animation
-static CGFloat const kMCVelocity                    = 0.9;  // Velocity of the spring animation
-static CGFloat const kMCAnimationDuration           = 0.4;  // Duration of the animation
-static NSTimeInterval const kMCBounceDuration1      = 0.2;  // Duration of the first part of the bounce animation
-static NSTimeInterval const kMCBounceDuration2      = 0.1;  // Duration of the second part of the bounce animation
+static CGFloat const kMCBounceAmplitude             = 0.0;//20.0; // Maximum bounce amplitude when using the MCSwipeTableViewCellModeSwitch mode
+static CGFloat const kMCDamping                     = 1;//0.6;  // Damping of the spring animation
+static CGFloat const kMCVelocity                    = 0.9;//0.9;  // Velocity of the spring animation
+static CGFloat const kMCAnimationDuration           = 0.4;//0.4;  // Duration of the animation
+static NSTimeInterval const kMCBounceDuration1      = 0.0;//0.2;  // Duration of the first part of the bounce animation
+static NSTimeInterval const kMCBounceDuration2      = 0.0;//0.1;  // Duration of the second part of the bounce animation
 static NSTimeInterval const kMCDurationLowLimit     = 0.25; // Lowest duration when swiping the cell because we try to simulate velocity
 static NSTimeInterval const kMCDurationHighLimit    = 0.1;  // Highest duration when swiping the cell because we try to simulate velocity
 
@@ -483,7 +483,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         state = MCSwipeTableViewCellState1;
     }
     
-    if (percentage >= 0.6 && _modeForState2) { //set delete action to begin at 0.7 position
+    if (percentage >= _secondTrigger && _modeForState2) { //set delete action to begin at 0.7 position
         state = MCSwipeTableViewCellState2;
     }
     
@@ -491,7 +491,7 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         state = MCSwipeTableViewCellState3;
     }
     
-    if (percentage <= - 0.6 && _modeForState4) { //set delete action to begin at 0.7 postion
+    if (percentage <= - _secondTrigger && _modeForState4) { //set delete action to begin at 0.7 postion
         state = MCSwipeTableViewCellState4;
     }
     
@@ -520,6 +520,12 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     
 }
 
+#define UIColorFromRGB(rgbValue) \
+[UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
+green:((float)((rgbValue & 0x00FF00) >>  8))/255.0 \
+blue:((float)((rgbValue & 0x0000FF) >>  0))/255.0 \
+alpha:0.7]
+
 - (void)slideViewWithPercentage:(CGFloat)percentage view:(UIView *)view isDragging:(BOOL)isDragging {
     if (!view) {
         return;
@@ -530,6 +536,8 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
     
     if (isDragging) {
         if (percentage >= 0 && percentage < _firstTrigger) {
+            _defaultColor = UIColorFromRGB(0x1ABC9C);
+            //colorFromHexString("0x1ABC9C"); //set default color
             position.x = [self offsetWithPercentage:(_firstTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
         }
         
@@ -538,6 +546,8 @@ typedef NS_ENUM(NSUInteger, MCSwipeTableViewCellDirection) {
         }
         
         else if (percentage < 0 && percentage >= -_firstTrigger) {
+            _defaultColor = UIColorFromRGB(0xEC644B);//set default color
+            //colorFromHexString("0xEC644B");
             position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(_firstTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
         }
         

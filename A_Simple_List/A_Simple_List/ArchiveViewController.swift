@@ -8,10 +8,11 @@
 import Foundation
 import UIKit
 
-var archiveList = //[DueElement(dueName: "CS225 MP", dueDate: time(year: 2017, month: 1, date: 1, hour: 21, minute: 30), createdDate: time(year: 2016, month: 12, date: 30, hour: 10, minute: 00)), DueElement(dueName: "ECON471 HW", dueDate: time(year: 2016, month: 12, date: 31, hour: 21, minute: 30), createdDate: time(year: 2016, month: 12, date: 29, hour: 12, minute: 30)), DueElement(dueName: "IOS Coding", dueDate: time(year: 2017, month: 1, date: 2, hour: 19, minute: 30), createdDate: time(year: 2016, month: 12, date: 30, hour: 21, minute: 30))]
-    [DueElement]()
+//empty array
+var archiveList = [DueElement]()//[DueElement(dueName: "CS225 MP", dueDate: time(year: 2017, month: 1, date: 1, hour: 21, minute: 30), createdDate: time(year: 2016, month: 12, date: 30, hour: 10, minute: 00)), DueElement(dueName: "ECON471 HW", dueDate: time(year: 2016, month: 12, date: 31, hour: 21, minute: 30), createdDate: time(year: 2016, month: 12, date: 29, hour: 12, minute: 30)), DueElement(dueName: "IOS Coding", dueDate: time(year: 2017, month: 1, date: 2, hour: 19, minute: 30), createdDate: time(year: 2016, month: 12, date: 30, hour: 21, minute: 30))]
 
-class ArchiveViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+
+class ArchiveViewController: UIViewController_, UITableViewDelegate, UITableViewDataSource {
     
     @IBAction func BackButton(_ sender: Any) {
         let secondViewController = self.storyboard?.instantiateViewController(withIdentifier: "LVC")
@@ -22,28 +23,45 @@ class ArchiveViewController: UIViewController, UITableViewDelegate, UITableViewD
    
     @IBOutlet weak var ArchiveListView: UITableView!
     
-    
     //TODO: Create a new list and replace the "dueList"
     //Put labels into prototype cell and link them in a new file called "ArchiveElementCell.swift", replace DueElementCell in the file
     
+    public func numberOfSections(in tableView: UITableView) -> Int {
+        //return 10
+        return (archiveList.count)
+    }
+    
+    public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if section==0{
+            return 0
+        }
+        return 3
+    }
+    
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
-        print("called tableview!")
-        return(archiveList.count)
+        return 1
+    }
+    
+    
+    public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let v = UIView()
+        v.backgroundColor = background_
+        return v
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
-        var progress:Float
         let cell: ArchiveElementCell = tableView.dequeueReusableCell(withIdentifier: "cell") as! ArchiveElementCell
+
+        cell.ProgressBar?.progressTintColor = textColor_custom.withAlphaComponent(0.5)
+        cell.ProgressBar?.trackTintColor = textColor_custom.withAlphaComponent(0.1)
+        cell.ProgressBar?.setProgress(archiveList[indexPath.section].finishProgress!, animated: false)
         
-        progress = 1-(Float(archiveList[indexPath.row].timeLeft!)/Float(archiveList[indexPath.row].timeInterval!))
-        cell.ProgressBar?.progressTintColor = archiveList[indexPath.row].color?.withAlphaComponent(0.5)
-        cell.ProgressBar?.trackTintColor = archiveList[indexPath.row].color?.withAlphaComponent(0.1)
-        cell.ProgressBar?.setProgress(progress, animated: true)
+        cell.DueDateLabel?.text = archiveList[indexPath.section].dueMonth_string! + " " + dueList[indexPath.section].getDueDateText() + ", " + dueList[indexPath.section].getDueYearText()
+        cell.DueNameLabel?.text = archiveList[indexPath.section].dueName
+        cell.FinishDateLabel?.text = archiveList[indexPath.section].finishMonth_string! + " " + archiveList[indexPath.section].getFinishDateText() + ", " + archiveList[indexPath.section].getFinishYearText()
         
-        cell.DueNameLabel?.text = archiveList[indexPath.row].dueName
-        cell.DueDateLabel?.text = String(describing: archiveList[indexPath.row].dueDate?.year)+"/"+String(describing: archiveList[indexPath.row].dueDate?.month)+"/"+String(describing: archiveList[indexPath.row].dueDate?.date)
         
         //add Mclist functionalities
         cell.separatorInset = UIEdgeInsets.zero
@@ -55,42 +73,48 @@ class ArchiveViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         
         //add Listener
-        cell.setSwipeGestureWith(UIImageView(image: UIImage(named: "check")!), color: UIColor(netHex:0x1ABC9C, isLargerAlpha: 0.7), mode: .switch, state: .state1, completionBlock: { (cell, state, mode) -> Void in
+        cell.setSwipeGestureWith(UIImageView(image: UIImage(named: "check")!), color: UIColor(netHex:0xec644b, isLargerAlpha: 0.7), mode: .none, state: .state1, completionBlock: { (cell, state, mode) -> Void in
         })
         
-        cell.setSwipeGestureWith(UIImageView(image: UIImage(named: "check")!), color: UIColor(netHex:0x1ABC9C, isLargerAlpha: 0.7), mode: .exit, state: .state2, completionBlock: { (cell, state, mode) -> Void in
-            
-            dueList.remove(at: indexPath.row)//potential bug
-            self.ArchiveListView.reloadData()
+        cell.setSwipeGestureWith(UIImageView(image: UIImage(named: "check")!), color: UIColor(netHex:0xec644b, isLargerAlpha: 0.7), mode: .none, state: .state2, completionBlock: { (cell, state, mode) -> Void in
         })
         
-        cell.setSwipeGestureWith(UIImageView(image: UIImage(named: "cross")!), color:  UIColor(netHex:0xEC644B, isLargerAlpha: 0.7), mode: .switch, state: .state3, completionBlock: { (cell, state, mode) -> Void in
-            
-            
+        cell.setSwipeGestureWith(UIImageView(image: UIImage(named: "cross")!), color:  UIColor(netHex:0xec644b, isLargerAlpha: 0.7), mode: .exit, state: .state3, completionBlock: { (cell, state, mode) -> Void in
         })
         
-        cell.setSwipeGestureWith(UIImageView(image: UIImage(named: "cross")!), color: UIColor(netHex:0xEC644B, isLargerAlpha: 0.7), mode: .exit, state: .state4, completionBlock: { (cell, state, mode) -> Void in
+        cell.setSwipeGestureWith(UIImageView(image: UIImage(named: "cross")!), color: UIColor(netHex:0xec644b, isLargerAlpha: 0.7), mode: .exit, state: .state4, completionBlock: { (cell, state, mode) -> Void in
             //swipe left to insert into dueList; sort through timeleft
             if dueList.isEmpty{
-                dueList.insert(archiveList[indexPath.row], at:0)
+                dueList.insert(archiveList[indexPath.section], at:0)
             }else{
                 var insertEnd = true
                 for i in 0...dueList.count-1{
-                    if(archiveList[indexPath.row].isLessInTimeLeft(element: dueList[i])){
-                        dueList.insert(archiveList[indexPath.row], at: i)
+                    if(archiveList[indexPath.section].isLessInTimeLeft(element: dueList[i])){ //BUG: Index out of range
+                        dueList.insert(archiveList[indexPath.section], at: i)
                         insertEnd = false
                         break
                     }
                 }
                 if(insertEnd){
-                    dueList.append(archiveList[indexPath.row])
+                    dueList.append(archiveList[indexPath.section])
                 }
             }
             
-            archiveList.remove(at: indexPath.row)//potential bug
+            archiveList.remove(at: indexPath.section)//potential bug
             self.ArchiveListView.reloadData()
             
         })
+        
+        //ProgressBar Style
+        cell.ProgressBar.layer.cornerRadius = 0.7
+        cell.ProgressBar.layer.masksToBounds = true
+        cell.ProgressBar.progressViewStyle = .bar
+        if (!cell.transformed)
+        {
+            cell.ProgressBar.transform = cell.ProgressBar.transform.scaledBy(x: 1, y: 7)
+            cell.transformed = true
+        }
+        
         
         return cell
     }

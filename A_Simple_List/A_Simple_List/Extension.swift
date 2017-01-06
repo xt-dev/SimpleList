@@ -11,6 +11,7 @@ import UIKit
 import UserNotifications
 import UserNotificationsUI
 
+
 extension UIColor {
     convenience init(red: Int, green: Int, blue: Int, isLargerAlpha: Float) {
         assert(red >= 0 && red <= 255, "Invalid red component")
@@ -23,6 +24,21 @@ extension UIColor {
     
     convenience init(netHex:Int, isLargerAlpha: Float) {
         self.init(red:(netHex >> 16) & 0xff, green:(netHex >> 8) & 0xff, blue:netHex & 0xff, isLargerAlpha: isLargerAlpha)
+    }
+}
+
+//color reference
+var green_: UIColor = UIColor.init(netHex: 0x1abc9c, isLargerAlpha: 1)
+var yellow_: UIColor = UIColor.init(netHex: 0xf1c40f, isLargerAlpha: 1)
+var red_: UIColor = UIColor.init(netHex: 0xec644b, isLargerAlpha: 1)
+var background_: UIColor = UIColor.init(netHex: 0xECF0F1, isLargerAlpha: 1)
+
+//Debug constrain
+extension NSLayoutConstraint {
+    
+    override open var description: String {
+        let id = identifier ?? ""
+        return "id: \(id), constant: \(constant)" //you may print whatever you want here
     }
 }
 
@@ -47,6 +63,22 @@ extension ListViewController:UNUserNotificationCenterDelegate{
         }
     }
 }
+
+//extension UIProgressView {
+//    
+//    @IBInspectable var barHeight : CGFloat {
+//        get {
+//            return transform.d * 10.0
+//        }
+//        set {
+//            // 2.0 Refers to the default height of 2
+//            let heightScale = 12.0 / 2.0
+//            let c = center
+//            transform = CGAffineTransform(scaleX: 1.0, y: CGFloat(heightScale))
+//            center = c
+//        }
+//    }
+//}
 
 extension Date {
     /// Returns the amount of years from another date

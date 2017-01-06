@@ -12,14 +12,19 @@ import UserNotifications
 import UserNotificationsUI
 
 
+var dueList = [DueElement(dueName: "CS225 MP", dueDate: time(year: 2017, month: 1, date: 5, hour: 22, minute: 57), createdDate: time(year: 2016, month: 12, date: 30, hour: 10, minute: 00)), DueElement(dueName: "ECON471 HW", dueDate: time(year: 2017, month: 12, date: 1, hour: 21, minute: 30), createdDate: time(year: 2016, month: 12, date: 29, hour: 12, minute: 30)), DueElement(dueName: "IOS Coding", dueDate: time(year: 2017, month: 1, date: 17, hour: 19, minute: 30), createdDate: time(year: 2016, month: 12, date: 30, hour: 21, minute: 30))]
 
-var dueList = [DueElement(dueName: "CS225 MP", dueDate: time(year: 2017, month: 1, date: 1, hour: 21, minute: 30), createdDate: time(year: 2016, month: 12, date: 30, hour: 10, minute: 00)), DueElement(dueName: "ECON471 HW", dueDate: time(year: 2016, month: 12, date: 31, hour: 21, minute: 30), createdDate: time(year: 2016, month: 12, date: 29, hour: 12, minute: 30)), DueElement(dueName: "IOS Coding", dueDate: time(year: 2017, month: 1, date: 2, hour: 19, minute: 30), createdDate: time(year: 2016, month: 12, date: 30, hour: 21, minute: 30))]
-
+//set default as nothing
+var FocusElement: DueElement? = nil
 
 //var refreshControl: UIRefreshControl!
 //var customView: UIView!
 
-class ListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate {
+class ListViewController: UIViewController_, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate {
+    
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
     
     @IBOutlet weak var DueListView: UITableView!
 
@@ -29,7 +34,7 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         let secondViewController = self.storyboard?.instantiateViewController(withIdentifier: "AVC")
         secondViewController?.transitioningDelegate = self.viewTransitionManager
         self.present(secondViewController!, animated: true, completion: nil)
-    }
+            }
     @IBAction func PersonalInfoViewButton(_ sender: Any) {
     }
     
@@ -155,6 +160,20 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
     //        refreshControl.addSubview(customView)
     //    }
     
+    //Long press Gesture
+    func longPress(_ sender: UILongPressGestureRecognizer) {
+        if sender.state == UIGestureRecognizerState.began {
+            let touchPoint = sender.location(in: self.DueListView)
+            if let indexPath = DueListView.indexPathForRow(at: touchPoint) {
+                print(indexPath[1])
+                FocusElement = dueList[indexPath[1]]
+                // your code here, get the section for the indexPath or do whatever you want
+                let secondViewController = self.storyboard?.instantiateViewController(withIdentifier: "FVC")
+                self.present(secondViewController!, animated: false, completion: nil)
+            }
+        }
+    }
+    
     //Swipe Gestures
     func handleSwipes(_ sender : UISwipeGestureRecognizer){
         if(sender.direction == .down /*&& sender.location(ofTouch: <#T##Int#>, in: <#T##UIView?#>)*/){
@@ -175,10 +194,28 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         //let sourceController = segue.source as! InputViewController
     }
     
+    //custom section header size
+    public func numberOfSections(in tableView: UITableView) -> Int {
+        //return 10
+        return (dueList.count)
+    }
+    
+    public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if (section == 0){
+            return 0
+        }
+        return 3
+    }
+    
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
-        print("called tableview!")
-        return(dueList.count)
+        return 1
+    }
+    
+    public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view = UIView()
+        view.backgroundColor = background_
+        return view
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
@@ -186,14 +223,15 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         var progress: Float?
         //custom progress bar
         let cell: DueElementCell = tableView.dequeueReusableCell(withIdentifier: "cell") as! DueElementCell
-
-        progress = 1-(Float(dueList[indexPath.row].timeLeft!)/Float(dueList[indexPath.row].timeInterval!))
-        cell.ProgressBar?.progressTintColor = dueList[indexPath.row].color?.withAlphaComponent(0.5)
-        cell.ProgressBar?.trackTintColor = dueList[indexPath.row].color?.withAlphaComponent(0.1)
+        progress = 1 - (Float(dueList[indexPath.section].timeLeft!)/Float(dueList[indexPath.section].timeInterval!))
+        cell.ProgressBar?.progressTintColor = dueList[indexPath.section].color?.withAlphaComponent(0.5)
+        cell.ProgressBar?.trackTintColor = dueList[indexPath.section].color?.withAlphaComponent(0.1)
         cell.ProgressBar?.setProgress(progress!, animated: true)
-        
-        cell.DueNameLabel?.text = dueList[indexPath.row].dueName
-        cell.DueDateLabel?.text = String(dueList[indexPath.row].timeLeft!) + "Hrs"
+
+        //Assign text to label
+        cell.DueNameLabel?.text = dueList[indexPath.section].dueName
+        cell.DueDateLabel?.text = dueList[indexPath.section].dueMonth_string! + " " + dueList[indexPath.section].getDueDateText() + ", " + dueList[indexPath.section].getDueYearText()
+        cell.TimeLeftLabel?.text = String(dueList[indexPath.section].timeLeft!) + "Hrs"
         
         //add Mclist functionalities
         cell.separatorInset = UIEdgeInsets.zero
@@ -214,26 +252,56 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
             let calender = NSCalendar.current
             let month = calender.component(.month, from: date as Date)
             let day = calender.component(.day, from: date as Date)
-            dueList[indexPath.row].finishDate = time(year: nil, month: month, date: day, hour: nil, minute: nil)
+            let year = calender.component(.year, from: date as Date)
+            dueList[indexPath.section].finishDate = time(year: year, month: month, date: day, hour: nil, minute: nil)
+            switch month {
+            case 1:
+                dueList[indexPath.section].finishMonth_string = "Jan"
+            case 2:
+                dueList[indexPath.section].finishMonth_string = "Feb"
+            case 3:
+                dueList[indexPath.section].finishMonth_string = "Mar"
+            case 4:
+                dueList[indexPath.section].finishMonth_string = "Apr"
+            case 5:
+                dueList[indexPath.section].finishMonth_string = "May"
+            case 6:
+                dueList[indexPath.section].finishMonth_string = "Jun"
+            case 7:
+                dueList[indexPath.section].finishMonth_string = "Jul"
+            case 8:
+                dueList[indexPath.section].finishMonth_string = "Aug"
+            case 9:
+                dueList[indexPath.section].finishMonth_string = "Sep"
+            case 10:
+                dueList[indexPath.section].finishMonth_string = "Oct"
+            case 11:
+                dueList[indexPath.section].finishMonth_string = "Nov"
+            case 12:
+                dueList[indexPath.section].finishMonth_string = "Dec"
+            default:
+                dueList[indexPath.section].finishMonth_string = "invalid"
+            }
+            dueList[indexPath.section].finishProgress = progress
             //swipe right to insert into archiveList; sort through finishDate
             if archiveList.isEmpty{
-                archiveList.insert(dueList[indexPath.row], at:0)
+                archiveList.insert(dueList[indexPath.section], at:0)
             }else{
                 var insertEnd = true
                 for i in 0...archiveList.count-1{
-                    if(dueList[indexPath.row].isLessInFinishDate(element: archiveList[i])){
-                        archiveList.insert(dueList[indexPath.row], at: i)
+                    if(dueList[indexPath.section].isLessInFinishDate(element: archiveList[i])){
+                        archiveList.insert(dueList[indexPath.section], at: i)
                         insertEnd = false
                         break
                     }
                 }
                 if(insertEnd){
-                    archiveList.append(dueList[indexPath.row])
+                    archiveList.append(dueList[indexPath.section])
                 }
             }
             print("insert secceed")
             
-            dueList.remove(at: indexPath.row)//potential bug
+            dueList.remove(at: indexPath.section)//potential bug
             self.DueListView.reloadData()
         })
         
@@ -244,27 +312,42 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         cell.setSwipeGestureWith(UIImageView(image: UIImage(named: "cross")!), color: UIColor(netHex:0xEC644B, isLargerAlpha: 0.7), mode: .exit, state: .state4, completionBlock: { (cell, state, mode) -> Void in
             
-            dueList.remove(at: indexPath.row)//potential bug
+            dueList.remove(at: indexPath.section)//potential bug
             self.DueListView.reloadData()
             
         })
 
+        //set rounded corner
+        cell.layer.cornerRadius = 7
+        cell.layer.masksToBounds = true
+        
+        //ProgressBar Style
+        cell.ProgressBar.layer.cornerRadius = 0.7
+        cell.ProgressBar.layer.masksToBounds = true
+        cell.ProgressBar.progressViewStyle = .bar
+        if (!cell.transformed)
+        {
+            cell.ProgressBar.transform = cell.ProgressBar.transform.scaledBy(x: 1, y: 7)
+            cell.transformed = true
+        }
         
         return(cell)
     }
-    
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(self.handleSwipes(_:)))
-        swipeDown.direction = .down
-        view.addGestureRecognizer(swipeDown)
-//        DueListView.addGestureRecognizer(swipeDown)
-
         
+//        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(self.handleSwipes(_:)))
+//        swipeDown.direction = .down
+//        view.addGestureRecognizer(swipeDown)
         createPanGestureRecognizer(targetView: self.DueListView)
         
+        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(self.longPress(_:)))
+        self.DueListView.addGestureRecognizer(longPressRecognizer)
+
+        //Refresh control
         //        refreshControl = UIRefreshControl()
         //        refreshControl.
         //        DueListView.addSubview(refreshControl)

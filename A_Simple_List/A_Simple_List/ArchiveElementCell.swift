@@ -16,6 +16,8 @@ class ArchiveElementCell:MCSwipeTableViewCell{
     @IBOutlet weak var FinishDateLabel: UILabel!
     @IBOutlet weak var ProgressBar: UIProgressView!
     
+    var transformed: Bool = false
+    
     //override to make text transparent when swipe
     override func setupSwipingView(){
         super.setupSwipingView()
@@ -27,9 +29,9 @@ class ArchiveElementCell:MCSwipeTableViewCell{
     
     override func uninstallSwipingView(){
         super.uninstallSwipingView()
-        DueNameLabel.textColor = .black
-        DueDateLabel.textColor = .black
-        FinishDateLabel.textColor = .black
+        DueNameLabel.textColor = textColor_custom
+        DueDateLabel.textColor = textColor_custom
+        FinishDateLabel.textColor = textColor_custom
         ProgressBar.isHidden = false
 }
 }

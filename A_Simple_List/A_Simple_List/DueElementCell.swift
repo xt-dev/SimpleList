@@ -10,13 +10,19 @@ import Foundation
 import UIKit
 import MCSwipeTableViewCell
 
+//text colors
+var textColor_custom = UIColor.init(netHex: 0x757478, isLargerAlpha: 1)
+
+
 class DueElementCell: MCSwipeTableViewCell{
     @IBOutlet weak var DueDateLabel: UILabel!
     @IBOutlet weak var DueNameLabel: UILabel!
     @IBOutlet weak var TimeLeftLabel: UILabel!
     @IBOutlet weak var ProgressBar: UIProgressView!
     
-    //override to make text transparent when swipe
+    var transformed: Bool = false
+    
+    //override to make text transparent when swiping
     override func setupSwipingView(){
         super.setupSwipingView()
         DueNameLabel.textColor = .white
@@ -27,9 +33,9 @@ class DueElementCell: MCSwipeTableViewCell{
     
     override func uninstallSwipingView(){
         super.uninstallSwipingView()
-        DueNameLabel.textColor = .black
-        DueDateLabel.textColor = .black
-        TimeLeftLabel.textColor = .black
+        DueNameLabel.textColor = textColor_custom
+        DueDateLabel.textColor = textColor_custom
+        TimeLeftLabel.textColor = textColor_custom
         ProgressBar.isHidden = false
     }
     
