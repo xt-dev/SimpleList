@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import CoreMotion
 
 class FocusViewController: UIViewController_{
     
@@ -17,6 +18,7 @@ class FocusViewController: UIViewController_{
     @IBOutlet weak var countDownLabel: UILabel!
     @IBOutlet weak var circularPath: circularPathView!
     
+    var motionManager: CMMotionManager!//motion
     
     let duration = FocusElement!.timeLeftInSec!
     var currDuration = FocusElement!.timeLeftInSec!
@@ -31,27 +33,74 @@ class FocusViewController: UIViewController_{
     var sec = FocusElement!.timeLeftInSec! - FocusElement!.timeLeftInMin!*60
     var hr = FocusElement!.timeLeft!
     
+    //detect shake motion and send alert
+//    override var canBecomeFirstResponder: Bool {
+//        return true
+//    }
+//    
+//    override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
+//        if motion == .motionShake {
+//            let alertController = UIAlertController(title: "Focus on your task!", message: "Put down your phone", preferredStyle: .alert)
+//            
+//            let defaultAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+//            alertController.addAction(defaultAction)
+//            
+//            present(alertController, animated: true, completion: nil)
+//        }
+//    }
     
+    //Long Press Gesture Constructor
+    func createLongPressGestureRecognizer(targetView: UIView)
+    {
+        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(self.longPress(_:)))
+        targetView.addGestureRecognizer(longPressRecognizer)
+    }
+    //Long press Gesture Handler
+    func longPress(_ sender: UILongPressGestureRecognizer) {
+        if sender.state == UIGestureRecognizerState.began {
+                let secondViewController = self.storyboard?.instantiateViewController(withIdentifier: "LVC")
+                self.present(secondViewController!, animated: false, completion: nil)
+                FocusElement = nil
+        }
+    }
+    
+    var myTimer: Timer?
+ 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         circularPath.backgroundColor = UIColor.clear
         taskNameLabel.text = FocusElement!.dueName!
         
-        _ = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(update), userInfo: nil, repeats: true)
+        myTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(update), userInfo: nil, repeats: true)
         
-        // Do any additional setup after loading the view, typically from a nib.
-        /*let panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(panedView(sender: )))
-         
-         self.circularPath.addGestureRecognizer(panRecognizer)
-         
-         circularPath.isUserInteractionEnabled = true
-         */
+        createLongPressGestureRecognizer(targetView: circularPath)
+        
+//        motionManager = CMMotionManager()
+//        motionManager.accelerometerUpdateInterval = 1
+//        motionManager.startAccelerometerUpdates()
+//        print(motionManager.isAccelerometerAvailable)
+//        
+//        if let accelerometerData = motionManager.accelerometerData {
+//            print("monitoring")
+//            print(accelerometerData.acceleration.x)
+//            print(accelerometerData.acceleration.y)
+//            print(accelerometerData.acceleration.z)
+//
+//        }
+
     }
     
     func update(){
         updateTimeLeft()
         updateTimeStayed()
+    }
+    
+    func timesup(){
+        let secondViewController = self.storyboard?.instantiateViewController(withIdentifier: "LVC")
+        self.present(secondViewController!, animated: true, completion: nil)
+        myTimer?.invalidate()
+        myTimer = nil
     }
     
     func updateTimeLeft(){
@@ -62,12 +111,8 @@ class FocusViewController: UIViewController_{
             minString = "00:"
             secString = "00"
             let alertController = UIAlertController(title: "Focus Mode", message: "Due has passed!", preferredStyle: UIAlertControllerStyle.alert)
-            alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default,handler: nil))
-            self.present(alertController, animated: true, completion: {
-                let secondViewController = self.storyboard?.instantiateViewController(withIdentifier: "LVC")
-                self.present(secondViewController!, animated: true, completion: nil)//bug
-            })
-            
+            alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default,handler: {action in self.timesup()}))
+            self.present(alertController, animated: true, completion: nil)
         }
         else {
             if (sec < 0){

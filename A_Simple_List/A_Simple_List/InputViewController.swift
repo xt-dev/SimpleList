@@ -40,7 +40,9 @@ class InputViewController: UIViewController_{
             {
                 print("add item: " + InputTextField.text!)
                 //declare a new DueElement object
-                let cur_dueElement = DueElement(dueName: InputTextField.text!, dueDate: Example_dueDate, createdDate: Example_create)
+                let cur_dueDate = time(year: year, month: month, date: day, hour: hour, minute: min)
+                //let cur_create = time(NSDate.
+                let cur_dueElement = DueElement(dueName: InputTextField.text!, dueDate: cur_dueDate, createdDate: Example_create)
                 /*Sort Start*/
                 if dueList.isEmpty{
                     dueList.insert(cur_dueElement, at:0)

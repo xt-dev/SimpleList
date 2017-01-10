@@ -12,7 +12,7 @@ import UserNotifications
 import UserNotificationsUI
 
 
-var dueList = [DueElement(dueName: "CS225 MP", dueDate: time(year: 2017, month: 1, date: 5, hour: 22, minute: 57), createdDate: time(year: 2016, month: 12, date: 30, hour: 10, minute: 00)), DueElement(dueName: "ECON471 HW", dueDate: time(year: 2017, month: 12, date: 1, hour: 21, minute: 30), createdDate: time(year: 2016, month: 12, date: 29, hour: 12, minute: 30)), DueElement(dueName: "IOS Coding", dueDate: time(year: 2017, month: 1, date: 17, hour: 19, minute: 30), createdDate: time(year: 2016, month: 12, date: 30, hour: 21, minute: 30))]
+var dueList = [DueElement(dueName: "CS225 MP", dueDate: time(year: 2017, month: 1, date: 9, hour: 14, minute: 50), createdDate: time(year: 2016, month: 12, date: 30, hour: 10, minute: 00)), DueElement(dueName: "ECON471 HW", dueDate: time(year: 2017, month: 12, date: 1, hour: 21, minute: 30), createdDate: time(year: 2016, month: 12, date: 29, hour: 12, minute: 30)), DueElement(dueName: "IOS Coding", dueDate: time(year: 2017, month: 1, date: 17, hour: 19, minute: 30), createdDate: time(year: 2016, month: 12, date: 30, hour: 21, minute: 30))]
 
 //set default as nothing
 var FocusElement: DueElement? = nil
@@ -48,23 +48,6 @@ class ListViewController: UIViewController_, UITableViewDelegate, UITableViewDat
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
-    
-    //detect shake motion and send alert
-    override var canBecomeFirstResponder: Bool {
-        return true
-    }
-    
-    override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
-        if motion == .motionShake {
-            let alertController = UIAlertController(title: "Hey Nigga", message: "What do you want to do?", preferredStyle: .alert)
-            
-            let defaultAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-            alertController.addAction(defaultAction)
-            
-            present(alertController, animated: true, completion: nil)
-        }
-    }
-    
 
     //notification setup
     func notify(){
@@ -165,8 +148,7 @@ class ListViewController: UIViewController_, UITableViewDelegate, UITableViewDat
         if sender.state == UIGestureRecognizerState.began {
             let touchPoint = sender.location(in: self.DueListView)
             if let indexPath = DueListView.indexPathForRow(at: touchPoint) {
-                print(indexPath[1])
-                FocusElement = dueList[indexPath[1]]
+                FocusElement = dueList[indexPath[0]]
                 let secondViewController = self.storyboard?.instantiateViewController(withIdentifier: "FVC")
                 self.present(secondViewController!, animated: false, completion: nil)
             }
@@ -232,7 +214,7 @@ class ListViewController: UIViewController_, UITableViewDelegate, UITableViewDat
         progress = 1 - (Float(dueList[indexPath.section].timeLeft!)/Float(dueList[indexPath.section].timeInterval!))
         cell.ProgressBar?.progressTintColor = dueList[indexPath.section].color?.withAlphaComponent(0.5)
         cell.ProgressBar?.trackTintColor = dueList[indexPath.section].color?.withAlphaComponent(0.1)
-        cell.ProgressBar?.setProgress(progress!, animated: true)
+        cell.ProgressBar?.setProgress(progress!, animated: false)
 
         //Assign text to label
         cell.DueNameLabel?.text = dueList[indexPath.section].dueName
@@ -342,7 +324,7 @@ class ListViewController: UIViewController_, UITableViewDelegate, UITableViewDat
         return(cell)
     }
 
-
+    
     
     
     override func viewDidLoad() {
@@ -366,6 +348,53 @@ class ListViewController: UIViewController_, UITableViewDelegate, UITableViewDat
         else {
             DueListView.isScrollEnabled = true;
         }
+        
+        let myTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(update), userInfo: nil, repeats: true)
+    }
+    
+    func update(){
+        if (dueList[0].timeLeft! <= 0){
+            let date = NSDate()
+            let calender = NSCalendar.current
+            let month = calender.component(.month, from: date as Date)
+            let day = calender.component(.day, from: date as Date)
+            let year = calender.component(.year, from: date as Date)
+            dueList[0].finishDate = time(year: year, month: month, date: day, hour: nil, minute: nil)
+            switch month {
+            case 1:
+                dueList[0].finishMonth_string = "Jan"
+            case 2:
+                dueList[0].finishMonth_string = "Feb"
+            case 3:
+                dueList[0].finishMonth_string = "Mar"
+            case 4:
+                dueList[0].finishMonth_string = "Apr"
+            case 5:
+                dueList[0].finishMonth_string = "May"
+            case 6:
+                dueList[0].finishMonth_string = "Jun"
+            case 7:
+                dueList[0].finishMonth_string = "Jul"
+            case 8:
+                dueList[0].finishMonth_string = "Aug"
+            case 9:
+                dueList[0].finishMonth_string = "Sep"
+            case 10:
+                dueList[0].finishMonth_string = "Oct"
+            case 11:
+                dueList[0].finishMonth_string = "Nov"
+            case 12:
+                dueList[0].finishMonth_string = "Dec"
+            default:
+                dueList[0].finishMonth_string = "invalid"
+            }
+            dueList[0].finishProgress = 1.0
+
+            archiveList.append(dueList[0])
+            dueList.remove(at: 0)
+        }
+        print("update!")
+        DueListView.reloadData()
     }
 
     override func didReceiveMemoryWarning() {

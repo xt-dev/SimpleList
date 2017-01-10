@@ -546,7 +546,12 @@ alpha:0.7]
         }
         
         else if (percentage < 0 && percentage >= -_firstTrigger) {
-            _defaultColor = UIColorFromRGB(0xEC644B);//set default color
+            if (_firstTrigger == 0.26){
+                _defaultColor = UIColorFromRGB(0xf1c40f);
+            }
+            else {
+                _defaultColor = UIColorFromRGB(0xEC644B);//set default color
+            }
             //colorFromHexString("0xEC644B");
             position.x = CGRectGetWidth(self.bounds) - [self offsetWithPercentage:(_firstTrigger / 2) relativeToWidth:CGRectGetWidth(self.bounds)];
         }

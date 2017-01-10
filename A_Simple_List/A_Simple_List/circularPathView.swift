@@ -31,7 +31,7 @@ class circularPathView: UIView{
         endAngle:CGFloat(M_PI*(3/2)),
         clockwise: true)
     
-    var duration = dueList[ 0].timeLeftInSec
+    var duration = FocusElement?.timeLeftInSec
     let desiredLineWidth: CGFloat = 2  // your desired value
     let redShapeLayer = CAShapeLayer()
     let yellowShapeLayer = CAShapeLayer()

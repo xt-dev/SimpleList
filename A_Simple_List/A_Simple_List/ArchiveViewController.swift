@@ -81,29 +81,28 @@ class ArchiveViewController: UIViewController_, UITableViewDelegate, UITableView
         cell.layoutMargins = UIEdgeInsets.zero
         cell.selectionStyle = .none
         cell.defaultColor = UIColor(netHex:0xfaf8f8, isLargerAlpha: 1)
-        cell.firstTrigger = 0.25;
+        cell.firstTrigger = 0.26;
         cell.secondTrigger = 0.45;
         
         
         //add Listener
-        cell.setSwipeGestureWith(UIImageView(image: UIImage(named: "check")!), color: UIColor(netHex:0xec644b, isLargerAlpha: 0.7), mode: .none, state: .state1, completionBlock: { (cell, state, mode) -> Void in
+        cell.setSwipeGestureWith(UIImageView(image: UIImage(named: "check")!), color: UIColor(netHex:0xf1c40f, isLargerAlpha: 0.7), mode: .none, state: .state1, completionBlock: { (cell, state, mode) -> Void in
         })
         
-        cell.setSwipeGestureWith(UIImageView(image: UIImage(named: "check")!), color: UIColor(netHex:0xec644b, isLargerAlpha: 0.7), mode: .none, state: .state2, completionBlock: { (cell, state, mode) -> Void in
+        cell.setSwipeGestureWith(UIImageView(image: UIImage(named: "check")!), color: UIColor(netHex:0xf1c40f, isLargerAlpha: 0.7), mode: .none, state: .state2, completionBlock: { (cell, state, mode) -> Void in
         })
         
-        cell.setSwipeGestureWith(UIImageView(image: UIImage(named: "cross")!), color:  UIColor(netHex:0xec644b, isLargerAlpha: 0.7), mode: .exit, state: .state3, completionBlock: { (cell, state, mode) -> Void in
+        cell.setSwipeGestureWith(UIImageView(image: UIImage(named: "cross")!), color:  UIColor(netHex:0xf1c40f, isLargerAlpha: 0.7), mode: .exit, state: .state3, completionBlock: { (cell, state, mode) -> Void in
         })
         
-        cell.setSwipeGestureWith(UIImageView(image: UIImage(named: "cross")!), color: UIColor(netHex:0xec644b, isLargerAlpha: 0.7), mode: .exit, state: .state4, completionBlock: { (cell, state, mode) -> Void in
+        cell.setSwipeGestureWith(UIImageView(image: UIImage(named: "cross")!), color: UIColor(netHex:0xf1c40f, isLargerAlpha: 0.7), mode: .exit, state: .state4, completionBlock: { (cell, state, mode) -> Void in
             //swipe left to insert into dueList; sort through timeleft
             if dueList.isEmpty{
                 dueList.insert(archiveList[indexPath.section], at:0)
             }else{
                 var insertEnd = true
                 for i in 0...dueList.count-1{
-                    if(archiveList[indexPath.section].isLessInTimeLeft(element: dueList[i])){ //BUG: Index out of range
-                        dueList.insert(archiveList[indexPath.section], at: i)
+                    if(archiveList[indexPath.section].isLessInTimeLeft(element: dueList[i])){                         dueList.insert(archiveList[indexPath.section], at: i)
                         insertEnd = false
                         break
                     }
@@ -118,6 +117,10 @@ class ArchiveViewController: UIViewController_, UITableViewDelegate, UITableView
             self.ArchiveListView.reloadData()
             
         })
+        
+        //set rounded corner
+        cell.layer.cornerRadius = 7
+        cell.layer.masksToBounds = true
         
         //ProgressBar Style
         cell.ProgressBar.layer.cornerRadius = 0.7

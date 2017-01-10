@@ -79,11 +79,12 @@ class PersonalViewController: UIViewController_, UITableViewDelegate, UITableVie
         ContentList.reloadData()
     }
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         var rect = view.bounds
-        rect.origin.y = -170
+        rect.origin.y = -130
         rect.size.height -= 40
         let chartView = PieChartView(frame: rect)
         let inprogress = totalTaskCount-finishedTaskCount-failedTaskCount
@@ -102,6 +103,7 @@ class PersonalViewController: UIViewController_, UITableViewDelegate, UITableVie
         set.colors = ChartColorTemplates.material()//set the color
         chartView.data = PieChartData(dataSet: set)
         chartView.animate(xAxisDuration: 2.0, yAxisDuration: 2.0)//, easingX: .EaseInCubic, easingY: .EaseInCubic)
+        chartView.legend.enabled = false
         view.addSubview(chartView)
         
         createRightEdgePanGestureRecognizer(targetView: self.view)
