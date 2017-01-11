@@ -9,8 +9,8 @@
 import Foundation
 import UIKit
 
-let Example_dueDate = time(year: 2017, month: 1, date: 7, hour: 3, minute: 19)
-let Example_create = time(year: 2017, month: 1, date: 5, hour: 8, minute: 12)
+//let Example_dueDate = time(year: 2017, month: 1, date: 7, hour: 3, minute: 19)
+//let Example_create = time(year: 2017, month: 1, date: 5, hour: 8, minute: 12)
 
 class InputViewController: UIViewController_{
     
@@ -40,9 +40,14 @@ class InputViewController: UIViewController_{
             {
                 print("add item: " + InputTextField.text!)
                 //declare a new DueElement object
+                
+                //for getting current date
+                let cur_date = NSDate()
+                let calender = NSCalendar.current
+                let components = calender.dateComponents([.year, .month, .day, .hour, .minute], from: cur_date as Date)
                 let cur_dueDate = time(year: year, month: month, date: day, hour: hour, minute: min)
-                //let cur_create = time(NSDate.
-                let cur_dueElement = DueElement(dueName: InputTextField.text!, dueDate: cur_dueDate, createdDate: Example_create)
+                let cur_create = time(year: components.year, month: components.month, date: components.day, hour: components.hour, minute: components.minute)
+                let cur_dueElement = DueElement(dueName: InputTextField.text!, dueDate: cur_dueDate, createdDate: cur_create)
                 /*Sort Start*/
                 if dueList.isEmpty{
                     dueList.insert(cur_dueElement, at:0)
@@ -200,8 +205,15 @@ class InputViewController: UIViewController_{
         let translation = sender.translation(in: monthLabel)
         let startPoint = CGPoint(x: 0, y: 0)
         sender.setTranslation(startPoint, in: monthLabel)
-        let currentLocation = translation.y
-        month -= Int(currentLocation/5)
+//        let currentLocation = translation.y
+//        month -= Int(currentLocation/5)
+        let v = sender.velocity(in: monthLabel)
+        print (v.y/100)
+        if(v.y/100<=1){
+            month += 1
+        }else{
+            month += Int(v.y/100)
+        }
         if (month < 1) {month = 12}
         if (month > 12) {month = 1}
         UIView.transition(with: monthLabel, duration: 0.75, options: [.transitionCrossDissolve], animations: {self.monthLabel.text = self.monthToString(month: self.month)}, completion: nil)

@@ -73,7 +73,12 @@ class ArchiveViewController: UIViewController_, UITableViewDelegate, UITableView
         
         cell.DueDateLabel?.text = archiveList[indexPath.section].dueMonth_string! + " " + archiveList[indexPath.section].getDueDateText() + ", " + archiveList[indexPath.section].getDueYearText()
         cell.DueNameLabel?.text = archiveList[indexPath.section].dueName
-        cell.FinishDateLabel?.text = archiveList[indexPath.section].finishMonth_string! + " " + archiveList[indexPath.section].getFinishDateText() + ", " + archiveList[indexPath.section].getFinishYearText()
+        if (archiveList[indexPath.section].finishDate != nil){
+            cell.FinishDateLabel?.text = archiveList[indexPath.section].finishMonth_string! + " " + archiveList[indexPath.section].getFinishDateText() + ", " + archiveList[indexPath.section].getFinishYearText()
+        }else{
+            cell.FinishDateLabel?.text = "Not Completed"
+        }
+        
         
         
         //add Mclist functionalities

@@ -20,18 +20,14 @@ class FocusViewController: UIViewController_{
     
     var motionManager: CMMotionManager!//motion
     
-    let duration = FocusElement!.timeLeftInSec!
-    var currDuration = FocusElement!.timeLeftInSec!
     var secStayed = 0
     var minStayed = 0
     var hrStayed = 0
     var secStayedinHr = 0
-    var minString: String = ""
-    var secString: String = ""
-    var hrString: String = ""
-    var min = FocusElement!.timeLeftInMin! - FocusElement!.timeLeft!*60
-    var sec = FocusElement!.timeLeftInSec! - FocusElement!.timeLeftInMin!*60
-    var hr = FocusElement!.timeLeft!
+    var minStayedString: String = ""
+    var secStayedString: String = ""
+    var hrStayedString: String = ""
+    var progress = 1 - (Float((FocusElement?.timeLeft!)!)/Float((FocusElement?.timeInterval!)!))
     
     //detect shake motion and send alert
 //    override var canBecomeFirstResponder: Bool {
@@ -49,6 +45,7 @@ class FocusViewController: UIViewController_{
 //        }
 //    }
     
+    
     //Long Press Gesture Constructor
     func createLongPressGestureRecognizer(targetView: UIView)
     {
@@ -58,6 +55,8 @@ class FocusViewController: UIViewController_{
     //Long press Gesture Handler
     func longPress(_ sender: UILongPressGestureRecognizer) {
         if sender.state == UIGestureRecognizerState.began {
+                myTimer?.invalidate()
+                myTimer = nil
                 let secondViewController = self.storyboard?.instantiateViewController(withIdentifier: "LVC")
                 self.present(secondViewController!, animated: false, completion: nil)
                 FocusElement = nil
@@ -69,26 +68,38 @@ class FocusViewController: UIViewController_{
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        update()
         circularPath.backgroundColor = UIColor.clear
         taskNameLabel.text = FocusElement!.dueName!
+        taskNameLabel.textColor = grey_.withAlphaComponent(0.7)
+        progressBar.transform = progressBar.transform.scaledBy(x: 1, y: 7)
         
         myTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(update), userInfo: nil, repeats: true)
         
         createLongPressGestureRecognizer(targetView: circularPath)
         
-//        motionManager = CMMotionManager()
-//        motionManager.accelerometerUpdateInterval = 1
-//        motionManager.startAccelerometerUpdates()
-//        print(motionManager.isAccelerometerAvailable)
-//        
-//        if let accelerometerData = motionManager.accelerometerData {
-//            print("monitoring")
-//            print(accelerometerData.acceleration.x)
-//            print(accelerometerData.acceleration.y)
-//            print(accelerometerData.acceleration.z)
-//
-//        }
-
+        motionManager = CMMotionManager()
+        motionManager.accelerometerUpdateInterval = 0.7
+        motionManager.startAccelerometerUpdates()
+        print(motionManager.isAccelerometerAvailable)
+        
+        motionManager.startAccelerometerUpdates(to: OperationQueue.main, withHandler: { (data, error) in
+            if let accelerometerData = self.motionManager.accelerometerData {
+                let x = accelerometerData.acceleration.x
+                let y = accelerometerData.acceleration.y
+                let z = accelerometerData.acceleration.z
+                print("x : \(x * 1000)")
+                print("y : \(y * 1000)")
+                print("z : \(z * 1000)")
+                print("sum : \(pow(x*100, 2) + pow(y*100, 2) + pow(z*100, 2))")
+                if ((pow(x*100, 2) + pow(y*100, 2) + pow(z*100, 2)) > 12000 || (pow(x*100, 2) + pow(y*100, 2) + pow(z*100, 2)) < 8000)
+                {
+                    let alertController = UIAlertController(title: "Focus Mode", message: "Put Down Your Phone!", preferredStyle: UIAlertControllerStyle.alert)
+                    alertController.addAction(UIAlertAction(title: "Okay...Okay", style: UIAlertActionStyle.default,handler: nil))
+                    self.present(alertController, animated: true, completion: nil)
+                }
+            }
+        })
     }
     
     func update(){
@@ -99,50 +110,33 @@ class FocusViewController: UIViewController_{
     func timesup(){
         let secondViewController = self.storyboard?.instantiateViewController(withIdentifier: "LVC")
         self.present(secondViewController!, animated: true, completion: nil)
-        myTimer?.invalidate()
-        myTimer = nil
+
     }
     
     func updateTimeLeft(){
-        if (currDuration > 0) {currDuration -= 1}
-        sec -= 1
-        if (sec <= 0 && min <= 0 && hr <= 0){
-            hrString = "00:"
-            minString = "00:"
-            secString = "00"
+        FocusElement?.refreshData()
+        let min = (FocusElement?.timeLeftInMin!)! - (FocusElement?.timeLeft!)!*60
+        let hr = FocusElement?.timeLeft!
+        if ((FocusElement?.timeLeftInSec)! < 0) {
+            myTimer?.invalidate()
+            myTimer = nil
             let alertController = UIAlertController(title: "Focus Mode", message: "Due has passed!", preferredStyle: UIAlertControllerStyle.alert)
             alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default,handler: {action in self.timesup()}))
             self.present(alertController, animated: true, completion: nil)
         }
-        else {
-            if (sec < 0){
-                if (min < 0){
-                    hr -= 1
-                    min = 59
-                    sec = 59
-                }
-                else {
-                    min -= 1
-                    sec = 59
-                }
-            }
-            if (hr < 10 ) {hrString = "0" + String(hr) + ":"}
-            else {hrString = String(hr) + ":"}
-            if (min < 10 ) {minString = "0" + String(min) + ":"}
-            else {minString = String(min) + ":"}
-            if (sec < 10 ) {secString = "0" + String(sec)}
-            else {secString = String(sec)}
-        }
-        //        countDownLabel.font = UIFont(name: "Helvetica", size: 36)
-        countDownLabel.text = hrString + minString + secString
-        if (Double(currDuration)/Double(duration) > 0.5) {countDownLabel.textColor = green_}
-        else if (Double(currDuration)/Double(duration) > 0.25) {countDownLabel.textColor = yellow_}
-        else {countDownLabel.textColor = red_}
+        countDownLabel.text = String(hr!) + "hrs" + String(min) + "mins left"
+        countDownLabel.textColor = grey_.withAlphaComponent(0.7)
+        progressBar.setProgress(progress, animated: true)
+        progressBar.backgroundColor = FocusElement?.color?.withAlphaComponent(0.2)
+        progressBar.progressTintColor = FocusElement?.color?.withAlphaComponent(0.7)
+        progressBar.layer.cornerRadius = 1
+        progressBar.layer.masksToBounds = true
     }
     
+
+        
     func updateTimeStayed(){
         secStayed += 1
-        secStayedinHr += 1
         if (secStayed == 60){
             if (minStayed == 60){
                 hrStayed += 1
@@ -154,11 +148,14 @@ class FocusViewController: UIViewController_{
                 secStayed = 0
             }
         }
-        if (secStayedinHr == 3600){secStayedinHr = 0}
-        progressBar.setProgress(Float(secStayedinHr)/3600.0, animated: false)
-        progressBar.backgroundColor = UIColor.lightGray
-        progressBar.progressTintColor = UIColor.darkGray
-        focusHourLabel.text = String(hrStayed) + "hrs" + String(minStayed) + "mins"
+        if (hrStayed < 10) {hrStayedString = "0" + String(hrStayed) + ":"}
+        else {hrStayedString = String(hrStayed) + ":"}
+        if (minStayed < 10 ) {minStayedString = "0" + String(minStayed) + ":"}
+        else {minStayedString = String(minStayed) + ":"}
+        if (secStayed < 10) {secStayedString = "0" + String(secStayed)}
+        else {secStayedString = String(secStayed)}
+        focusHourLabel.textColor = FocusElement?.color?.withAlphaComponent(0.7)
+        focusHourLabel.text = hrStayedString + minStayedString + secStayedString
     }
     /*
      func panedView(sender: UIPanGestureRecognizer){

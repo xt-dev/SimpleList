@@ -349,52 +349,46 @@ class ListViewController: UIViewController_, UITableViewDelegate, UITableViewDat
             DueListView.isScrollEnabled = true;
         }
         
-        let myTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(update), userInfo: nil, repeats: true)
+        //refresh the list
+        Timer.scheduledTimer(timeInterval: 60, target: self, selector: #selector(updateList), userInfo: nil, repeats: true)
     }
     
-    func update(){
-        if (dueList[0].timeLeft! <= 0){
-            let date = NSDate()
-            let calender = NSCalendar.current
-            let month = calender.component(.month, from: date as Date)
-            let day = calender.component(.day, from: date as Date)
-            let year = calender.component(.year, from: date as Date)
-            dueList[0].finishDate = time(year: year, month: month, date: day, hour: nil, minute: nil)
-            switch month {
-            case 1:
-                dueList[0].finishMonth_string = "Jan"
-            case 2:
-                dueList[0].finishMonth_string = "Feb"
-            case 3:
-                dueList[0].finishMonth_string = "Mar"
-            case 4:
-                dueList[0].finishMonth_string = "Apr"
-            case 5:
-                dueList[0].finishMonth_string = "May"
-            case 6:
-                dueList[0].finishMonth_string = "Jun"
-            case 7:
-                dueList[0].finishMonth_string = "Jul"
-            case 8:
-                dueList[0].finishMonth_string = "Aug"
-            case 9:
-                dueList[0].finishMonth_string = "Sep"
-            case 10:
-                dueList[0].finishMonth_string = "Oct"
-            case 11:
-                dueList[0].finishMonth_string = "Nov"
-            case 12:
-                dueList[0].finishMonth_string = "Dec"
-            default:
-                dueList[0].finishMonth_string = "invalid"
-            }
-            dueList[0].finishProgress = 1.0
+    func updateList(){
+        if (dueList.isEmpty == false){
+            var count_temp = dueList.count
+            var i = 0
+            while (i < count_temp){
+                if (dueList[i].timeLeft! <= 0){
+                    let components = getCurrentTimeComponents()
+                    dueList[i].finishDate = nil//mark as not finished
+                    dueList[i].monthStringInput(month: components.month!)
+                    dueList[i].finishProgress = 1 - (Float(dueList[i].timeLeft!)/Float(dueList[i].timeInterval!))
 
-            archiveList.append(dueList[0])
-            dueList.remove(at: 0)
+//                    insert into archiveList; sort through finishDate
+                    if archiveList.isEmpty{
+                        archiveList.insert(dueList[i], at:0)
+                    }else{
+                        var insertEnd = true
+                        for j in 0...archiveList.count-1{
+                            if(dueList[i].isLessInFinishDate(element: archiveList[j])){
+                                archiveList.insert(dueList[i], at: j)
+                                insertEnd = false
+                                break
+                            }
+                        }
+                        if(insertEnd){
+                            archiveList.append(dueList[i])
+                        }
+                    }
+                    print(i)
+                    dueList.remove(at: i)
+                    count_temp -= 1
+                }
+                i += 1
+            }
+            print("update!")
+            DueListView.reloadData()
         }
-        print("update!")
-        DueListView.reloadData()
     }
 
     override func didReceiveMemoryWarning() {

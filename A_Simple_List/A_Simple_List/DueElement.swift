@@ -9,29 +9,6 @@
 import Foundation
 import UIKit
 
-struct time{
-    var year: Int?
-    var month: Int?
-    var date: Int?
-    var hour: Int?
-    var minute: Int?
-    var inputDate: Date?
-    var currentDate: Date?
-    var current = NSCalendar.current
-    let dates = NSDate()
-    
-    init(year: Int?, month: Int?, date: Int?, hour: Int?, minute: Int?){
-        self.year = year
-        self.month = month
-        self.date = date
-        self.hour = hour
-        self.minute = minute
-        self.current = Calendar.current
-        inputDate = current.date(from: DateComponents(calendar: nil, timeZone: nil, era: nil, year: year, month: month, day: date, hour: hour, minute: minute, second: nil, nanosecond: nil, weekday: nil, weekdayOrdinal: nil, quarter: nil, weekOfMonth: nil, weekOfYear: nil, yearForWeekOfYear: nil))!
-        currentDate = current.date(from: DateComponents(calendar: nil, timeZone: nil, era: nil, year: current.component(.year, from: dates as Date), month: current.component(.month, from: dates as Date), day: current.component(.day, from: dates as Date), hour: current.component(.hour, from: dates as Date), minute: current.component(.minute, from: dates as Date), second: nil, nanosecond: nil, weekday: nil, weekdayOrdinal: nil, quarter: nil, weekOfMonth: nil, weekOfYear: nil, yearForWeekOfYear: nil))
-    }
-}
-
 class DueElement{
     
     var dueName: String?
@@ -48,7 +25,6 @@ class DueElement{
     var finishDate: time?
     var finishMonth_string: String?
     var finishProgress: Float?
-
     
     init(dueName: String, dueDate: time, createdDate: time){
         self.dueName = dueName
@@ -94,6 +70,19 @@ class DueElement{
         fatalError("init(coder:) has not been implemented")
     }
     
+    func refreshData(){
+        let dates = NSDate()
+        let current = Calendar.current
+        let dueDate = current.date(from: DateComponents(calendar: nil, timeZone: nil, era: nil, year: self.dueDate!.year!, month: self.dueDate!.month!, day: self.dueDate!.date!, hour: self.dueDate!.hour!, minute: self.dueDate!.minute!, second: nil, nanosecond: nil, weekday: nil, weekdayOrdinal: nil, quarter: nil, weekOfMonth: nil, weekOfYear: nil, yearForWeekOfYear: nil))!
+        let currentDate = current.date(from: DateComponents(calendar: nil, timeZone: nil, era: nil, year: current.component(.year, from: dates as Date), month: current.component(.month, from: dates as Date), day: current.component(.day, from: dates as Date), hour: current.component(.hour, from: dates as Date), minute: current.component(.minute, from: dates as Date), second: nil, nanosecond: nil, weekday: nil, weekdayOrdinal: nil, quarter: nil, weekOfMonth: nil, weekOfYear: nil, yearForWeekOfYear: nil))
+        self.timeLeft = dueDate.hours(from: (currentDate)!)
+        self.timeLeftInMin = dueDate.minutes(from: (currentDate)!)
+        self.timeLeftInSec = dueDate.seconds(from: (currentDate)!)
+        if (Float(timeLeft!)/24.0 <= 1.0) {color = red_}
+        else if (Float(timeLeft!)/24.0 <= 2.0) {color = yellow_}
+        else {color = green_}
+    }
+    
     func getDueYearText()->String{
         let year: Int? = self.dueDate?.year
         let s: String = String(year!)
@@ -133,4 +122,37 @@ class DueElement{
     func isLessInTimeLeft(element: DueElement)->Bool{
         return self.timeLeft!<element.timeLeft!
     }
+    //fill in the month_string automatically
+    func monthStringInput(month: Int){
+        switch month {
+        case 1:
+            self.finishMonth_string = "Jan"
+        case 2:
+            self.finishMonth_string = "Feb"
+        case 3:
+            self.finishMonth_string = "Mar"
+        case 4:
+            self.finishMonth_string = "Apr"
+        case 5:
+            self.finishMonth_string = "May"
+        case 6:
+            self.finishMonth_string = "Jun"
+        case 7:
+            self.finishMonth_string = "Jul"
+        case 8:
+            self.finishMonth_string = "Aug"
+        case 9:
+            self.finishMonth_string = "Sep"
+        case 10:
+            self.finishMonth_string = "Oct"
+        case 11:
+            self.finishMonth_string = "Nov"
+        case 12:
+            self.finishMonth_string = "Dec"
+        default:
+            self.finishMonth_string = "invalid"
+        }
+    }
 }
+
+

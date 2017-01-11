@@ -11,6 +11,37 @@ import UIKit
 import UserNotifications
 import UserNotificationsUI
 
+struct time{
+    var year: Int?
+    var month: Int?
+    var date: Int?
+    var hour: Int?
+    var minute: Int?
+    var inputDate: Date?
+    var currentDate: Date?
+    var current = NSCalendar.current
+    let dates = NSDate()
+    
+    init(year: Int?, month: Int?, date: Int?, hour: Int?, minute: Int?){
+        self.year = year
+        self.month = month
+        self.date = date
+        self.hour = hour
+        self.minute = minute
+        self.current = Calendar.current
+        inputDate = current.date(from: DateComponents(calendar: nil, timeZone: nil, era: nil, year: year, month: month, day: date, hour: hour, minute: minute, second: nil, nanosecond: nil, weekday: nil, weekdayOrdinal: nil, quarter: nil, weekOfMonth: nil, weekOfYear: nil, yearForWeekOfYear: nil))!
+        currentDate = current.date(from: DateComponents(calendar: nil, timeZone: nil, era: nil, year: current.component(.year, from: dates as Date), month: current.component(.month, from: dates as Date), day: current.component(.day, from: dates as Date), hour: current.component(.hour, from: dates as Date), minute: current.component(.minute, from: dates as Date), second: nil, nanosecond: nil, weekday: nil, weekdayOrdinal: nil, quarter: nil, weekOfMonth: nil, weekOfYear: nil, yearForWeekOfYear: nil))
+    }
+}
+
+//get current time
+func getCurrentTimeComponents()->DateComponents{
+    let cur_date = NSDate()
+    let calender = NSCalendar.current
+    let components = calender.dateComponents([.year, .month, .day, .hour, .minute], from: cur_date as Date)
+    return components
+}
+
 
 extension UIColor {
     convenience init(red: Int, green: Int, blue: Int, isLargerAlpha: Float) {
