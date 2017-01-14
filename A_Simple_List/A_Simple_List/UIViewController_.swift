@@ -14,4 +14,14 @@ class UIViewController_ : UIViewController{
     override var prefersStatusBarHidden: Bool {
         return true
     }
+//    func shouldAutorotate() -> Bool {
+//        return false
+//    }
+//    
+//    func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+//        return UIInterfaceOrientationMask.portrait
+//    }
+    func navigationControllerSupportedInterfaceOrientations(navigationController: UINavigationController) -> UIInterfaceOrientationMask {
+        return UIInterfaceOrientationMask.portrait
+    }
 }

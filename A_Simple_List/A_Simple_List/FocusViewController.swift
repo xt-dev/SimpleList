@@ -17,34 +17,10 @@ class FocusViewController: UIViewController_{
     @IBOutlet weak var focusHourLabel: UILabel!
     @IBOutlet weak var countDownLabel: UILabel!
     @IBOutlet weak var circularPath: circularPathView!
+    @IBOutlet weak var statusBar: UILabel!
     
     var motionManager: CMMotionManager!//motion
-    
-    var secStayed = 0
-    var minStayed = 0
-    var hrStayed = 0
-    var secStayedinHr = 0
-    var minStayedString: String = ""
-    var secStayedString: String = ""
-    var hrStayedString: String = ""
     var progress = 1 - (Float((FocusElement?.timeLeft!)!)/Float((FocusElement?.timeInterval!)!))
-    
-    //detect shake motion and send alert
-//    override var canBecomeFirstResponder: Bool {
-//        return true
-//    }
-//    
-//    override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
-//        if motion == .motionShake {
-//            let alertController = UIAlertController(title: "Focus on your task!", message: "Put down your phone", preferredStyle: .alert)
-//            
-//            let defaultAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-//            alertController.addAction(defaultAction)
-//            
-//            present(alertController, animated: true, completion: nil)
-//        }
-//    }
-    
     
     //Long Press Gesture Constructor
     func createLongPressGestureRecognizer(targetView: UIView)
@@ -55,19 +31,52 @@ class FocusViewController: UIViewController_{
     //Long press Gesture Handler
     func longPress(_ sender: UILongPressGestureRecognizer) {
         if sender.state == UIGestureRecognizerState.began {
-                myTimer?.invalidate()
-                myTimer = nil
-                let secondViewController = self.storyboard?.instantiateViewController(withIdentifier: "LVC")
-                self.present(secondViewController!, animated: false, completion: nil)
-                FocusElement = nil
+            myTimer?.invalidate()
+            myTimer = nil
+            let secondViewController = self.storyboard?.instantiateViewController(withIdentifier: "LVC")
+            self.present(secondViewController!, animated: false, completion: nil)
+            FocusElement = nil
         }
     }
     
+    //refresh status bar
+    var count:Int = 0
+    
+    func refreshStatusBar(){
+        
+        refresh()
+        _ = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(refresh), userInfo: nil, repeats: true)
+    }
+    
+    func refresh(){
+        
+        UIView.transition(with: statusBar, duration: 1, options: [.transitionCrossDissolve], animations: {self.count += 1
+            let hour = getCurrentTimeComponents().hour
+            let minute = getCurrentTimeComponents().minute
+            var minString = ""
+            var hrString = ""
+            if (self.count > 5 && self.count <= 10){
+                self.statusBar.text = String(dueList.count) + " dues left"
+                if (self.count == 10) {self.count = 0}}
+            else{
+                if (hour! < 10) {hrString = "0" + String(hour!)}
+                else {hrString = String(hour!)}
+                if (minute! < 10) {minString = "0" + String(minute!)}
+                else {minString = String(minute!)}
+                self.statusBar.text = hrString + ":" + minString
+            }}, completion: nil)
+    }
+
+    
     var myTimer: Timer?
- 
+    var start: DateComponents?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        refreshStatusBar()
+        
+        start = getCurrentTimeComponents()
         update()
         circularPath.backgroundColor = UIColor.clear
         taskNameLabel.text = FocusElement!.dueName!
@@ -83,15 +92,13 @@ class FocusViewController: UIViewController_{
         motionManager.startAccelerometerUpdates()
         print(motionManager.isAccelerometerAvailable)
         
+        
         motionManager.startAccelerometerUpdates(to: OperationQueue.main, withHandler: { (data, error) in
             if let accelerometerData = self.motionManager.accelerometerData {
                 let x = accelerometerData.acceleration.x
                 let y = accelerometerData.acceleration.y
                 let z = accelerometerData.acceleration.z
-                print("x : \(x * 1000)")
-                print("y : \(y * 1000)")
-                print("z : \(z * 1000)")
-                print("sum : \(pow(x*100, 2) + pow(y*100, 2) + pow(z*100, 2))")
+                
                 if ((pow(x*100, 2) + pow(y*100, 2) + pow(z*100, 2)) > 12000 || (pow(x*100, 2) + pow(y*100, 2) + pow(z*100, 2)) < 8000)
                 {
                     let alertController = UIAlertController(title: "Focus Mode", message: "Put Down Your Phone!", preferredStyle: UIAlertControllerStyle.alert)
@@ -110,7 +117,7 @@ class FocusViewController: UIViewController_{
     func timesup(){
         let secondViewController = self.storyboard?.instantiateViewController(withIdentifier: "LVC")
         self.present(secondViewController!, animated: true, completion: nil)
-
+        
     }
     
     func updateTimeLeft(){
@@ -124,38 +131,41 @@ class FocusViewController: UIViewController_{
             alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default,handler: {action in self.timesup()}))
             self.present(alertController, animated: true, completion: nil)
         }
-        countDownLabel.text = String(hr!) + "hrs" + String(min) + "mins left"
-        countDownLabel.textColor = grey_.withAlphaComponent(0.7)
+        if (hr! > 24){
+            countDownLabel.text = String(Int(hr!/24)) + "days" + String(hr!%24) + "hrs left"
+        }
+        else {
+            countDownLabel.text = String(hr!) + "hrs" + String(min) + "mins left"
+        }
+        countDownLabel.textColor = grey_.withAlphaComponent(0.5)
         progressBar.setProgress(progress, animated: true)
-        progressBar.backgroundColor = FocusElement?.color?.withAlphaComponent(0.2)
         progressBar.progressTintColor = FocusElement?.color?.withAlphaComponent(0.7)
-        progressBar.layer.cornerRadius = 1
+        progressBar.trackTintColor = FocusElement?.color?.withAlphaComponent(0.2)
+        progressBar.layer.cornerRadius = 8
         progressBar.layer.masksToBounds = true
     }
     
-
-        
+    
+    
     func updateTimeStayed(){
-        secStayed += 1
-        if (secStayed == 60){
-            if (minStayed == 60){
-                hrStayed += 1
-                secStayed = 0
-                minStayed = 0
-            }
-            else {
-                minStayed += 1
-                secStayed = 0
-            }
-        }
-        if (hrStayed < 10) {hrStayedString = "0" + String(hrStayed) + ":"}
-        else {hrStayedString = String(hrStayed) + ":"}
-        if (minStayed < 10 ) {minStayedString = "0" + String(minStayed) + ":"}
-        else {minStayedString = String(minStayed) + ":"}
-        if (secStayed < 10) {secStayedString = "0" + String(secStayed)}
-        else {secStayedString = String(secStayed)}
+        let current = getCurrentTimeComponents()
+        let currentTime = Calendar.current.date(from: DateComponents(calendar: nil, timeZone: nil, era: nil, year: current.year, month: current.month, day: current.day, hour: current.hour, minute: current.minute, second: current.second, nanosecond: nil, weekday: nil, weekdayOrdinal: nil, quarter: nil, weekOfMonth: nil, weekOfYear: nil, yearForWeekOfYear: nil))
+        let startTime = Calendar.current.date(from: DateComponents(calendar: nil, timeZone: nil, era: nil, year: start?.year, month: start?.month, day: start?.day, hour: start?.hour, minute: start?.minute, second: start?.second, nanosecond: nil, weekday: nil, weekdayOrdinal: nil, quarter: nil, weekOfMonth: nil, weekOfYear: nil, yearForWeekOfYear: nil))
+        let hr = (currentTime?.hours(from: startTime!))!
+        let min = (currentTime?.minutes(from: startTime!))! - hr*60
+        let sec = (currentTime?.seconds(from: startTime!))! - hr*3600 - min*60
+        var minString: String = ""
+        var secString: String = ""
+        var hrString: String = ""
+        if (hr < 10) {hrString = "0" + String(hr) + ":"}
+        else {hrString = String(hr) + ":"}
+        if (min < 10 ) {minString = "0" + String(min) + ":"}
+        else {minString = String(min) + ":"}
+        if (sec < 10) {secString = "0" + String(sec)}
+        else {secString = String(sec)}
         focusHourLabel.textColor = FocusElement?.color?.withAlphaComponent(0.7)
-        focusHourLabel.text = hrStayedString + minStayedString + secStayedString
+        focusHourLabel.text = hrString + minString + secString
+        
     }
     /*
      func panedView(sender: UIPanGestureRecognizer){

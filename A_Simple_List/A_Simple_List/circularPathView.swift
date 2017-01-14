@@ -38,7 +38,7 @@ class circularPathView: UIView{
         shapeLayer.lineWidth = desiredLineWidth
         backLayer.path = circlePath.cgPath
         backLayer.fillColor = UIColor.clear.cgColor
-        backLayer.strokeColor = grey_.withAlphaComponent(0.05).cgColor
+        backLayer.strokeColor = grey_.withAlphaComponent(0.1).cgColor
         backLayer.lineWidth = desiredLineWidth
         animation.duration = 3600
         animation.fromValue = 0

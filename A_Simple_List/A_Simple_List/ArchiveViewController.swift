@@ -22,6 +22,36 @@ class ArchiveViewController: UIViewController_, UITableViewDelegate, UITableView
     }
    
     @IBOutlet weak var ArchiveListView: UITableView!
+    @IBOutlet weak var statusBar: UILabel!
+    
+    //refresh status bar
+    var count:Int = 0
+    
+    func refreshStatusBar(){
+        
+        refresh()
+        _ = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(refresh), userInfo: nil, repeats: true)
+    }
+    
+    func refresh(){
+        
+        UIView.transition(with: statusBar, duration: 1, options: [.transitionCrossDissolve], animations: {self.count += 1
+            let hour = getCurrentTimeComponents().hour
+            let minute = getCurrentTimeComponents().minute
+            var minString = ""
+            var hrString = ""
+            if (self.count > 5 && self.count <= 10){
+                self.statusBar.text = String(dueList.count) + " dues left"
+                if (self.count == 10) {self.count = 0}}
+            else{
+                if (hour! < 10) {hrString = "0" + String(hour!)}
+                else {hrString = String(hour!)}
+                if (minute! < 10) {minString = "0" + String(minute!)}
+                else {minString = String(minute!)}
+                self.statusBar.text = hrString + ":" + minString
+            }}, completion: nil)
+    }
+
     
     //Gesture Control
     //Left to right Edge Pan Gesture
@@ -97,10 +127,10 @@ class ArchiveViewController: UIViewController_, UITableViewDelegate, UITableView
         cell.setSwipeGestureWith(UIImageView(image: UIImage(named: "check")!), color: UIColor(netHex:0xf1c40f, isLargerAlpha: 0.7), mode: .none, state: .state2, completionBlock: { (cell, state, mode) -> Void in
         })
         
-        cell.setSwipeGestureWith(UIImageView(image: UIImage(named: "cross")!), color:  UIColor(netHex:0xf1c40f, isLargerAlpha: 0.7), mode: .exit, state: .state3, completionBlock: { (cell, state, mode) -> Void in
+        cell.setSwipeGestureWith(UIImageView(image: arrow_use), color:  UIColor(netHex:0xf1c40f, isLargerAlpha: 0.7), mode: .exit, state: .state3, completionBlock: { (cell, state, mode) -> Void in
         })
         
-        cell.setSwipeGestureWith(UIImageView(image: UIImage(named: "cross")!), color: UIColor(netHex:0xf1c40f, isLargerAlpha: 0.7), mode: .exit, state: .state4, completionBlock: { (cell, state, mode) -> Void in
+        cell.setSwipeGestureWith(UIImageView(image: arrow_use), color: UIColor(netHex:0xf1c40f, isLargerAlpha: 0.7), mode: .exit, state: .state4, completionBlock: { (cell, state, mode) -> Void in
             //swipe left to insert into dueList; sort through timeleft
             if dueList.isEmpty{
                 dueList.insert(archiveList[indexPath.section], at:0)
@@ -144,6 +174,17 @@ class ArchiveViewController: UIViewController_, UITableViewDelegate, UITableView
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        //refresh
+        refreshStatusBar()
+        
+        //disable scroll if tableview is not full
+        if (ArchiveListView.contentSize.height < ArchiveListView.frame.size.height) {
+            ArchiveListView.isScrollEnabled = false;
+        }
+        else {
+            ArchiveListView.isScrollEnabled = true;
+        }
         
         createLeftEdgePanGestureRecognizer(targetView: self.ArchiveListView)
         createLeftEdgePanGestureRecognizer(targetView: self.view)

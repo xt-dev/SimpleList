@@ -38,7 +38,7 @@ struct time{
 func getCurrentTimeComponents()->DateComponents{
     let cur_date = NSDate()
     let calender = NSCalendar.current
-    let components = calender.dateComponents([.year, .month, .day, .hour, .minute], from: cur_date as Date)
+    let components = calender.dateComponents([.year, .month, .day, .hour, .minute, .second], from: cur_date as Date)
     return components
 }
 
@@ -94,6 +94,21 @@ extension ListViewController:UNUserNotificationCenterDelegate{
             
         }
     }
+}
+
+//Images
+let cross_use = imageWithImage(image: UIImage(named: "删除标记")!, scaledToSize: CGSize(width: 28, height: 28))
+let check_use = imageWithImage(image: UIImage(named: "确认标记")!, scaledToSize: CGSize(width: 28, height: 28))
+let arrow_use = imageWithImage(image: UIImage(named: "向左箭头")!, scaledToSize: CGSize(width: 28, height: 28))
+
+
+//resize image
+func imageWithImage(image:UIImage, scaledToSize newSize:CGSize) -> UIImage{
+    UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0);
+    image.draw(in: CGRect(origin: CGPoint.zero, size: CGSize(width: newSize.width, height: newSize.height)))
+    let newImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+    UIGraphicsEndImageContext()
+    return newImage
 }
 
 //extension UIProgressView {

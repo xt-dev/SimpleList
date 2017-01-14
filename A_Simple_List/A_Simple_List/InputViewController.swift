@@ -12,6 +12,8 @@ import UIKit
 //let Example_dueDate = time(year: 2017, month: 1, date: 7, hour: 3, minute: 19)
 //let Example_create = time(year: 2017, month: 1, date: 5, hour: 8, minute: 12)
 
+var preYPosition = 0.0
+
 class InputViewController: UIViewController_{
     
     //Links
@@ -22,6 +24,7 @@ class InputViewController: UIViewController_{
     @IBOutlet weak var yearLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var monthLabel: UILabel!
+    @IBOutlet weak var statusBar: UILabel!
 
     
     var min: Int = 0
@@ -31,6 +34,34 @@ class InputViewController: UIViewController_{
     var year: Int = 0
     let date = NSDate()
     let currentTime = Calendar.current
+    
+    //refresh status bar
+    var count:Int = 0
+    
+    func refreshStatusBar(){
+        
+        refresh()
+        _ = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(refresh), userInfo: nil, repeats: true)
+    }
+    
+    func refresh(){
+        
+        UIView.transition(with: statusBar, duration: 1, options: [.transitionCrossDissolve], animations: {self.count += 1
+            let hour = getCurrentTimeComponents().hour
+            let minute = getCurrentTimeComponents().minute
+            var minString = ""
+            var hrString = ""
+            if (self.count > 5 && self.count <= 10){
+                self.statusBar.text = String(dueList.count) + " dues left"
+                if (self.count == 10) {self.count = 0}}
+            else{
+                if (hour! < 10) {hrString = "0" + String(hour!)}
+                else {hrString = String(hour!)}
+                if (minute! < 10) {minString = "0" + String(minute!)}
+                else {minString = String(minute!)}
+                self.statusBar.text = hrString + ":" + minString
+            }}, completion: nil)
+    }
     
     //Handle swipe gesture
     func handleSwipes(_ sender : UISwipeGestureRecognizer){
@@ -95,8 +126,15 @@ class InputViewController: UIViewController_{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("Checkpoint")
         // Do any additional setup after loading the view, typically from a nib.
+        
+        //refresh
+        refreshStatusBar()
+
+        
+        //auto pop out keyboard
+        self.InputTextField.becomeFirstResponder()
+        
         let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(self.handleSwipes(_:)))
         swipeUp.direction = .up
         view.addGestureRecognizer(swipeUp)
@@ -153,33 +191,89 @@ class InputViewController: UIViewController_{
     
     
     func minPanedView(sender: UIPanGestureRecognizer){
-        let translation = sender.translation(in: minLabel)
-        let startPoint = CGPoint(x: 0, y: 0)
-        sender.setTranslation(startPoint, in: minLabel)
-        let currentLocation = translation.y
-        min -= Int(currentLocation/5)
+        //        let translation = sender.translation(in: minLabel)
+        //        let startPoint = CGPoint(x: 0, y: 0)
+        //        sender.setTranslation(startPoint, in: minLabel)
+        //        let currentLocation = translation.y
+        //        min -= Int(currentLocation/5)
+        var preYPosition = 0.0
+        var currentYPosition = 0.0;
+        if sender.state == UIGestureRecognizerState.began{
+            preYPosition =  Double(sender.location(in: minLabel).y)
+        }
+        
+        if sender.state == UIGestureRecognizerState.ended{
+            preYPosition = 0.0
+        }
+        
+        if sender.state == UIGestureRecognizerState.changed{
+            currentYPosition = Double(sender.location(in: minLabel).y)
+            if(currentYPosition-preYPosition >= 2){
+                min-=1
+            }
+            else if(currentYPosition-preYPosition <= -2){
+                min+=1
+            }
+            usleep(180000)
+            preYPosition = currentYPosition
+        }
+        //
         if (min < 0) {min = 59}
         if (min > 59) {min = 0}
-        UIView.transition(with: minLabel, duration: 0.75, options: [.transitionCrossDissolve], animations: {self.minLabel.text = self.timeToString(time: self.min)}, completion: nil)
+        UIView.transition(with: minLabel, duration: 0.1, options: [.transitionCrossDissolve], animations: {self.minLabel.text = self.timeToString(time: self.min)}, completion: nil)
     }
     
     func hrPanedView(sender: UIPanGestureRecognizer){
-        let translation = sender.translation(in: hourLabel)
-        let startPoint = CGPoint(x: 0, y: 0)
-        sender.setTranslation(startPoint, in: hourLabel)
-        let currentLocation = translation.y
-        hour -= Int(currentLocation/5)
+        var preYPosition = 0.0
+        var currentYPosition = 0.0;
+        if sender.state == UIGestureRecognizerState.began{
+            preYPosition =  Double(sender.location(in: hourLabel).y)
+        }
+        
+        if sender.state == UIGestureRecognizerState.ended{
+            preYPosition = 0.0
+        }
+        
+        if sender.state == UIGestureRecognizerState.changed{
+            currentYPosition = Double(sender.location(in: hourLabel).y)
+            if(currentYPosition-preYPosition >= 2){
+                hour-=1
+            }
+            else if(currentYPosition-preYPosition <= -2){
+                hour+=1
+            }
+            usleep(180000)
+            preYPosition = currentYPosition
+        }
+        
         if (hour < 0) {hour = 23}
         if (hour > 23) {hour = 0}
-        UIView.transition(with: hourLabel, duration: 0.75, options: [.transitionCrossDissolve], animations: {self.hourLabel.text = self.timeToString(time: self.hour)}, completion: nil)
+        UIView.transition(with: hourLabel, duration: 0.1, options: [.transitionCrossDissolve], animations: {self.hourLabel.text = self.timeToString(time: self.hour)}, completion: nil)
     }
     
     func datePanedView(sender: UIPanGestureRecognizer){
-        let translation = sender.translation(in: dateLabel)
-        let startPoint = CGPoint(x: 0, y: 0)
-        sender.setTranslation(startPoint, in: dateLabel)
-        let currentLocation = translation.y
-        day -= Int(currentLocation/5)
+        var preYPosition = 0.0
+        var currentYPosition = 0.0;
+        if sender.state == UIGestureRecognizerState.began{
+            preYPosition =  Double(sender.location(in: dateLabel).y)
+        }
+        
+        if sender.state == UIGestureRecognizerState.ended{
+            preYPosition = 0.0
+        }
+        
+        if sender.state == UIGestureRecognizerState.changed{
+            currentYPosition = Double(sender.location(in: dateLabel).y)
+            if(currentYPosition-preYPosition >= 2){
+                day-=1
+            }
+            else if(currentYPosition-preYPosition <= -2){
+                day+=1
+            }
+            usleep(180000)
+            preYPosition = currentYPosition
+        }
+        
         if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12){
             if (day < 1) {day = 31}
             if (day > 31) {day = 1}
@@ -198,34 +292,61 @@ class InputViewController: UIViewController_{
             if (day < 1) {day = 30}
             if (day > 30) {day = 1}
         }
-        UIView.transition(with: dateLabel, duration: 0.75, options: [.transitionCrossDissolve], animations: {self.dateLabel.text = self.timeToString(time: self.day)}, completion: nil)
+        UIView.transition(with: dateLabel, duration: 0.1, options: [.transitionCrossDissolve], animations: {self.dateLabel.text = self.timeToString(time: self.day)}, completion: nil)
     }
     
     func monthPanedView(sender: UIPanGestureRecognizer){
-        let translation = sender.translation(in: monthLabel)
-        let startPoint = CGPoint(x: 0, y: 0)
-        sender.setTranslation(startPoint, in: monthLabel)
-//        let currentLocation = translation.y
-//        month -= Int(currentLocation/5)
-        let v = sender.velocity(in: monthLabel)
-        print (v.y/100)
-        if(v.y/100<=1){
-            month += 1
-        }else{
-            month += Int(v.y/100)
+        var preYPosition = 0.0
+        var currentYPosition = 0.0;
+        if sender.state == UIGestureRecognizerState.began{
+            preYPosition =  Double(sender.location(in: monthLabel).y)
         }
+        
+        if sender.state == UIGestureRecognizerState.ended{
+            preYPosition = 0.0
+        }
+        
+        if sender.state == UIGestureRecognizerState.changed{
+            currentYPosition = Double(sender.location(in: monthLabel).y)
+            if(currentYPosition-preYPosition >= 2){
+                month-=1
+            }
+            else if(currentYPosition-preYPosition <= -2){
+                month+=1
+            }
+            usleep(200000)
+            preYPosition = currentYPosition
+        }
+        
         if (month < 1) {month = 12}
         if (month > 12) {month = 1}
-        UIView.transition(with: monthLabel, duration: 0.75, options: [.transitionCrossDissolve], animations: {self.monthLabel.text = self.monthToString(month: self.month)}, completion: nil)
+        UIView.transition(with: monthLabel, duration: 0.1, options: [.transitionCrossDissolve], animations: {self.monthLabel.text = self.monthToString(month: self.month)}, completion: nil)
     }
     
     func yrPanedView(sender: UIPanGestureRecognizer){
-        let translation = sender.translation(in: yearLabel)
-        let startPoint = CGPoint(x: 0, y: 0)
-        sender.setTranslation(startPoint, in: yearLabel)
-        let currentLocation = translation.y
-        year -= Int(currentLocation/10)
-        UIView.transition(with: yearLabel, duration: 0.75, options: [.transitionCrossDissolve], animations: {self.yearLabel.text = String(self.year)}, completion: nil)
+        var preYPosition = 0.0
+        var currentYPosition = 0.0;
+        if sender.state == UIGestureRecognizerState.began{
+            preYPosition =  Double(sender.location(in: yearLabel).y)
+        }
+        
+        if sender.state == UIGestureRecognizerState.ended{
+            preYPosition = 0.0
+        }
+        
+        if sender.state == UIGestureRecognizerState.changed{
+            currentYPosition = Double(sender.location(in: yearLabel).y)
+            if(currentYPosition-preYPosition >= 2){
+                year-=1
+            }
+            else if(currentYPosition-preYPosition <= -2){
+                year+=1
+            }
+            usleep(200000)
+            preYPosition = currentYPosition
+        }
+        
+        UIView.transition(with: yearLabel, duration: 0.1, options: [.transitionCrossDissolve], animations: {self.yearLabel.text = String(self.year)}, completion: nil)
     }
     
     override func didReceiveMemoryWarning() {

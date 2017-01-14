@@ -22,24 +22,48 @@ var FocusElement: DueElement? = nil
 
 class ListViewController: UIViewController_, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate {
     
-    override var prefersStatusBarHidden: Bool {
-        return true
-    }
-    
     @IBOutlet weak var DueListView: UITableView!
+    @IBOutlet weak var statusBar: UILabel!
 
-    @IBAction func ListViewButton(_ sender: Any) {
+    @IBAction func PersonalViewButton(_ sender: Any) {
         let secondViewController = self.storyboard?.instantiateViewController(withIdentifier: "PVC")
-        self.present(secondViewController!, animated: true, completion: nil)
+        self.present(secondViewController!, animated: false, completion: nil)
+    }
+    @IBAction func ListViewButton(_ sender: Any) {
+        
     }
     @IBAction func ArchiveViewButton(_ sender: Any) {
         let secondViewController = self.storyboard?.instantiateViewController(withIdentifier: "AVC")
-        secondViewController?.transitioningDelegate = self.viewTransitionManager
-        self.present(secondViewController!, animated: true, completion: nil)
-            }
-    @IBAction func PersonalInfoViewButton(_ sender: Any) {
+        self.present(secondViewController!, animated: false, completion: nil)
+    }
+
+    
+    var count:Int = 0
+    
+    func refreshStatusBar(){
+        
+        refresh()
+        _ = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(refresh), userInfo: nil, repeats: true)
     }
     
+    func refresh(){
+        
+        UIView.transition(with: statusBar, duration: 1, options: [.transitionCrossDissolve], animations: {self.count += 1
+            let hour = getCurrentTimeComponents().hour
+            let minute = getCurrentTimeComponents().minute
+            var minString = ""
+            var hrString = ""
+            if (self.count > 5 && self.count <= 10){
+                self.statusBar.text = String(dueList.count) + " dues left"
+                if (self.count == 10) {self.count = 0}}
+            else{
+                if (hour! < 10) {hrString = "0" + String(hour!)}
+                else {hrString = String(hour!)}
+                if (minute! < 10) {minString = "0" + String(minute!)}
+                else {minString = String(minute!)}
+                self.statusBar.text = hrString + ":" + minString
+            }}, completion: nil)
+    }
     
     var viewTransitionManager = ViewTransitionManager()
     
@@ -219,7 +243,17 @@ class ListViewController: UIViewController_, UITableViewDelegate, UITableViewDat
         //Assign text to label
         cell.DueNameLabel?.text = dueList[indexPath.section].dueName
         cell.DueDateLabel?.text = dueList[indexPath.section].dueMonth_string! + " " + dueList[indexPath.section].getDueDateText() + ", " + dueList[indexPath.section].getDueYearText()
-        cell.TimeLeftLabel?.text = String(dueList[indexPath.section].timeLeft!) + "Hrs"
+        if (dueList[indexPath.section].color == green_){
+            cell.TimeLeftLabel?.text = String(Int((dueList[indexPath.section].timeLeft!)/24)) + " Days"
+        }
+        else if (dueList[indexPath.section].color == yellow_){
+            cell.TimeLeftLabel?.text = String(dueList[indexPath.section].timeLeft!) + " Hrs"
+        }
+        else if (dueList[indexPath.section].timeLeft! <= 0){
+            cell.TimeLeftLabel?.text = "0 Min"
+        }else{
+            cell.TimeLeftLabel?.text = String(dueList[indexPath.section].timeLeft!) + " Hrs" + String(dueList[indexPath.section].timeLeftInMin! - dueList[indexPath.section].timeLeft!*60) + " Mins"
+        }
         
         //add Mclist functionalities
         cell.separatorInset = UIEdgeInsets.zero
@@ -230,10 +264,10 @@ class ListViewController: UIViewController_, UITableViewDelegate, UITableViewDat
         cell.secondTrigger = 0.45;
         
         //add Listener
-        cell.setSwipeGestureWith(UIImageView(image: UIImage(named: "check")!), color: UIColor(netHex:0x1ABC9C, isLargerAlpha: 0.7), mode: .switch, state: .state1, completionBlock: { (cell, state, mode) -> Void in
+        cell.setSwipeGestureWith(UIImageView(image: check_use), color: UIColor(netHex:0x1ABC9C, isLargerAlpha: 0.7), mode: .switch, state: .state1, completionBlock: { (cell, state, mode) -> Void in
         })
         
-        cell.setSwipeGestureWith(UIImageView(image: UIImage(named: "check")!), color: UIColor(netHex:0x1ABC9C, isLargerAlpha: 0.7), mode: .exit, state: .state2, completionBlock: { (cell, state, mode) -> Void in
+        cell.setSwipeGestureWith(UIImageView(image: check_use), color: UIColor(netHex:0x1ABC9C, isLargerAlpha: 0.7), mode: .exit, state: .state2, completionBlock: { (cell, state, mode) -> Void in
             
             //register finishDate
             let date = NSDate()
@@ -271,6 +305,7 @@ class ListViewController: UIViewController_, UITableViewDelegate, UITableViewDat
                 dueList[indexPath.section].finishMonth_string = "invalid"
             }
             dueList[indexPath.section].finishProgress = progress
+            dueList[indexPath.section].isFinished = true
             //swipe right to insert into archiveList; sort through finishDate
             if archiveList.isEmpty{
                 archiveList.insert(dueList[indexPath.section], at:0)
@@ -295,13 +330,11 @@ class ListViewController: UIViewController_, UITableViewDelegate, UITableViewDat
             self.DueListView.reloadData()
         })
         
-        cell.setSwipeGestureWith(UIImageView(image: UIImage(named: "cross")!), color:  UIColor(netHex:0xEC644B, isLargerAlpha: 0.7), mode: .switch, state: .state3, completionBlock: { (cell, state, mode) -> Void in
-            
-            
+
+        cell.setSwipeGestureWith(UIImageView(image: cross_use), color:  UIColor(netHex:0xEC644B, isLargerAlpha: 0.7), mode: .switch, state: .state3, completionBlock: { (cell, state, mode) -> Void in
         })
         
-        cell.setSwipeGestureWith(UIImageView(image: UIImage(named: "cross")!), color: UIColor(netHex:0xEC644B, isLargerAlpha: 0.7), mode: .exit, state: .state4, completionBlock: { (cell, state, mode) -> Void in
-            
+        cell.setSwipeGestureWith(UIImageView(image: cross_use), color: UIColor(netHex:0xEC644B, isLargerAlpha: 0.7), mode: .exit, state: .state4, completionBlock: { (cell, state, mode) -> Void in
             dueList.remove(at: indexPath.section)//potential bug
             self.DueListView.reloadData()
             
@@ -331,6 +364,9 @@ class ListViewController: UIViewController_, UITableViewDelegate, UITableViewDat
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
+        //refresh status bar
+        refreshStatusBar()
+        
         //Pull Down Pan Gesture
         createPanGestureRecognizer(targetView: self.DueListView)
         //Long Press Gesture
@@ -358,9 +394,11 @@ class ListViewController: UIViewController_, UITableViewDelegate, UITableViewDat
             var count_temp = dueList.count
             var i = 0
             while (i < count_temp){
+                dueList[i].refreshData()//refresh data
                 if (dueList[i].timeLeft! <= 0){
                     let components = getCurrentTimeComponents()
-                    dueList[i].finishDate = nil//mark as not finished
+                    dueList[i].finishDate = time(year: components.year, month: components.month, date: components.day, hour: components.hour, minute: components.minute)
+                    dueList[i].isFinished = false//mark as not finished
                     dueList[i].monthStringInput(month: components.month!)
                     dueList[i].finishProgress = 1 - (Float(dueList[i].timeLeft!)/Float(dueList[i].timeInterval!))
 
@@ -391,6 +429,45 @@ class ListViewController: UIViewController_, UITableViewDelegate, UITableViewDat
         }
     }
 
+    //notification
+    func notify(element : DueElement){
+        let content = UNMutableNotificationContent()
+        if(element.color == yellow_){
+            content.title = "Intro to Notifications"
+            content.subtitle = "progress bar is yellow"
+            content.body = "Sample code from WWDC"
+            content.sound = UNNotificationSound.default()
+        }else if(element.color == red_){
+            content.title = "Intro to Notifications"
+            content.subtitle = "progress bar is red"
+            content.body = "Sample code from WWDC"
+            content.sound = UNNotificationSound.default()
+        }
+        
+        //To Present image in notification
+        if let path = Bundle.main.path(forResource: "monkey", ofType: "png") {
+            let url = URL(fileURLWithPath: path)
+            
+            do {
+                let attachment = try UNNotificationAttachment(identifier: "sampleImage", url: url, options: nil)
+                content.attachments = [attachment]
+            } catch {
+                print("attachment not found.")
+            }
+        }
+        
+        // Deliver the notification in five seconds.
+        let trigger = UNTimeIntervalNotificationTrigger.init(timeInterval: 1.0, repeats: false)
+        let request = UNNotificationRequest(identifier:requestIdentifier, content: content, trigger: trigger)
+        UNUserNotificationCenter.current().delegate = self
+        UNUserNotificationCenter.current().add(request){(error) in
+            if (error != nil){
+                
+                print(error?.localizedDescription)
+            }
+        }
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

@@ -24,6 +24,36 @@ class PersonalViewController: UIViewController_, UITableViewDelegate, UITableVie
     
     //Links
     @IBOutlet weak var ContentList: UITableView!
+    @IBOutlet weak var statusBar: UILabel!
+    
+    //refresh status bar
+    var count:Int = 0
+    
+    func refreshStatusBar(){
+        
+        refresh()
+        _ = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(refresh), userInfo: nil, repeats: true)
+    }
+    
+    func refresh(){
+        
+        UIView.transition(with: statusBar, duration: 1, options: [.transitionCrossDissolve], animations: {self.count += 1
+            let hour = getCurrentTimeComponents().hour
+            let minute = getCurrentTimeComponents().minute
+            var minString = ""
+            var hrString = ""
+            if (self.count > 5 && self.count <= 10){
+                self.statusBar.text = String(dueList.count) + " dues left"
+                if (self.count == 10) {self.count = 0}}
+            else{
+                if (hour! < 10) {hrString = "0" + String(hour!)}
+                else {hrString = String(hour!)}
+                if (minute! < 10) {minString = "0" + String(minute!)}
+                else {minString = String(minute!)}
+                self.statusBar.text = hrString + ":" + minString
+            }}, completion: nil)
+    }
+
     
     //Gesture Control
     //Right to left Edge Pan Gesture
@@ -82,6 +112,9 @@ class PersonalViewController: UIViewController_, UITableViewDelegate, UITableVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        refreshStatusBar()
+        
         // Do any additional setup after loading the view, typically from a nib.
         var rect = view.bounds
         rect.origin.y = -130

@@ -25,10 +25,12 @@ class DueElement{
     var finishDate: time?
     var finishMonth_string: String?
     var finishProgress: Float?
+    var isFinished: Bool?
     
     init(dueName: String, dueDate: time, createdDate: time){
         self.dueName = dueName
         self.dueDate = dueDate
+        self.isFinished = false
         self.timeInterval = dueDate.inputDate?.hours(from: (createdDate.inputDate)!)
         self.timeLeft = dueDate.inputDate?.hours(from: (dueDate.currentDate)!)
         self.timeLeftInMin = dueDate.inputDate?.minutes(from: (dueDate.currentDate)!)
@@ -113,6 +115,7 @@ class DueElement{
         return s
     }
     
+    //Have bugs!!! if finishDate is nil
     func isLessInFinishDate(element: DueElement)->Bool{
         if (self.finishDate?.month)! > (element.finishDate?.month)!{return false}
         if (self.finishDate?.date)! > (element.finishDate?.date)!{return false}
