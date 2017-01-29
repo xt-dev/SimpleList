@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class ViewTransitionManager: NSObject, UIViewControllerAnimatedTransitioning, UIViewControllerTransitioningDelegate {
+class ViewTransitionManager_reverse: NSObject, UIViewControllerAnimatedTransitioning, UIViewControllerTransitioningDelegate {
     var duration = 0.5
     var isPresenting = false
     
@@ -27,30 +27,30 @@ class ViewTransitionManager: NSObject, UIViewControllerAnimatedTransitioning, UI
         
         // Set up the transform for sliding
         let container = transitionContext.containerView
-        let moveDown = CGAffineTransform(translationX: 0, y: container.frame.height)
-        let moveUp = CGAffineTransform(translationX: 0, y: -50)
+        let moveDown = CGAffineTransform(translationX: 0, y: 50)
+        let moveUp = CGAffineTransform(translationX: 0, y: container.frame.height)
         
         // Add both views to the container view
         if isPresenting {
             print("taking snapshot")
-            toView.transform = moveUp
+            toView.transform = moveDown
             snapshot = fromView.snapshotView(afterScreenUpdates: true)
-//            let snapshot_size: CGRect = CGRect(x: 0, y: 20, width: (snapshot?.frame.width)!, height: ((snapshot?.frame.height)! - 20))
-//            let snapshot_ei = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-//            fromView.resizableSnapshotView(from: snapshot_size, afterScreenUpdates: true, withCapInsets: snapshot_ei)
+            //            let snapshot_size: CGRect = CGRect(x: 0, y: 20, width: (snapshot?.frame.width)!, height: ((snapshot?.frame.height)! - 20))
+            //            let snapshot_ei = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            //            fromView.resizableSnapshotView(from: snapshot_size, afterScreenUpdates: true, withCapInsets: snapshot_ei)
             container.addSubview(toView)
             container.addSubview(snapshot!)
-            }
+        }
         
         // Perform the animation
         UIView.animate(withDuration: duration, delay: 0.0, usingSpringWithDamping: 1, initialSpringVelocity: 0.2, options: [], animations: {
             
             if self.isPresenting {
-                self.snapshot?.transform = moveDown
+                self.snapshot?.transform = moveUp
                 toView.transform = CGAffineTransform.identity
             } else {
                 self.snapshot?.transform = CGAffineTransform.identity
-                fromView.transform = moveUp
+                fromView.transform = moveDown
             }
             
             

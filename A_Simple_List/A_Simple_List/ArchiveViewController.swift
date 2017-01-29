@@ -13,16 +13,21 @@ var archiveList = [DueElement]()//[DueElement(dueName: "CS225 MP", dueDate: time
 
 
 class ArchiveViewController: UIViewController_, UITableViewDelegate, UITableViewDataSource {
-    
-    @IBAction func BackButton(_ sender: Any) {
-        let secondViewController = self.storyboard?.instantiateViewController(withIdentifier: "LVC")
-        //        secondViewController?.transitioningDelegate = self.viewTransitionManager
-        //self.view.isHidden = true
-        self.present(secondViewController!, animated: true, completion: nil)
-    }
    
     @IBOutlet weak var ArchiveListView: UITableView!
     @IBOutlet weak var statusBar: UILabel!
+    @IBAction func PersonalViewButton(_ sender: Any) {
+        let secondViewController = self.storyboard?.instantiateViewController(withIdentifier: "PVC")
+        self.present(secondViewController!, animated: false, completion: nil)
+    }
+    @IBAction func ListViewButton(_ sender: Any) {
+        let secondViewController = self.storyboard?.instantiateViewController(withIdentifier: "LVC")
+        self.present(secondViewController!, animated: false, completion: nil)
+    }
+    @IBAction func ArchiveViewButton(_ sender: Any) {
+    }
+    
+    
     
     //refresh status bar
     var count:Int = 0
@@ -103,7 +108,7 @@ class ArchiveViewController: UIViewController_, UITableViewDelegate, UITableView
         
         cell.DueDateLabel?.text = archiveList[indexPath.section].dueMonth_string! + " " + archiveList[indexPath.section].getDueDateText() + ", " + archiveList[indexPath.section].getDueYearText()
         cell.DueNameLabel?.text = archiveList[indexPath.section].dueName
-        if (archiveList[indexPath.section].finishDate != nil){
+        if (archiveList[indexPath.section].isFinished == true){
             cell.FinishDateLabel?.text = archiveList[indexPath.section].finishMonth_string! + " " + archiveList[indexPath.section].getFinishDateText() + ", " + archiveList[indexPath.section].getFinishYearText()
         }else{
             cell.FinishDateLabel?.text = "Not Completed"
@@ -127,30 +132,40 @@ class ArchiveViewController: UIViewController_, UITableViewDelegate, UITableView
         cell.setSwipeGestureWith(UIImageView(image: UIImage(named: "check")!), color: UIColor(netHex:0xf1c40f, isLargerAlpha: 0.7), mode: .none, state: .state2, completionBlock: { (cell, state, mode) -> Void in
         })
         
-        cell.setSwipeGestureWith(UIImageView(image: arrow_use), color:  UIColor(netHex:0xf1c40f, isLargerAlpha: 0.7), mode: .exit, state: .state3, completionBlock: { (cell, state, mode) -> Void in
+        cell.setSwipeGestureWith(UIImageView(image: arrow_use), color:  UIColor(netHex:0xf1c40f, isLargerAlpha: 0.7), mode: .switch, state: .state3, completionBlock: { (cell, state, mode) -> Void in
+            
+            archiveList[indexPath.section].refreshData()
+            if (archiveList[indexPath.section].timeLeftInSec! <= 0){
+                let alertController = UIAlertController(title: "Archive List", message: "Invalid action", preferredStyle: UIAlertControllerStyle.alert)
+                alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default,handler: nil))
+                self.present(alertController, animated: true, completion: nil)
+            }
         })
         
         cell.setSwipeGestureWith(UIImageView(image: arrow_use), color: UIColor(netHex:0xf1c40f, isLargerAlpha: 0.7), mode: .exit, state: .state4, completionBlock: { (cell, state, mode) -> Void in
             //swipe left to insert into dueList; sort through timeleft
-            if dueList.isEmpty{
-                dueList.insert(archiveList[indexPath.section], at:0)
-            }else{
-                var insertEnd = true
-                for i in 0...dueList.count-1{
-                    if(archiveList[indexPath.section].isLessInTimeLeft(element: dueList[i])){                         dueList.insert(archiveList[indexPath.section], at: i)
-                        insertEnd = false
-                        break
+            
+            //error check
+            //error checking
+                if dueList.isEmpty{
+                    dueList.insert(archiveList[indexPath.section], at:0)
+                }else{
+                    var insertEnd = true
+                    for i in 0...dueList.count-1{
+                        if(archiveList[indexPath.section].isLessInTimeLeft(element: dueList[i])){                         dueList.insert(archiveList[indexPath.section], at: i)
+                            insertEnd = false
+                            break
+                        }
+                    }
+                    if(insertEnd){
+                        dueList.append(archiveList[indexPath.section])
                     }
                 }
-                if(insertEnd){
-                    dueList.append(archiveList[indexPath.section])
-                }
-            }
-            //update completed count
-            finishedTaskCount -= 1
-            archiveList.remove(at: indexPath.section)//potential bug
-            self.ArchiveListView.reloadData()
-            
+                //update completed count
+                finishedTaskCount -= 1
+                archiveList[indexPath.section].isFinished = false //reassign as false
+                archiveList.remove(at: indexPath.section)//potential bug
+                self.ArchiveListView.reloadData()
         })
         
         //set rounded corner

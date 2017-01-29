@@ -17,7 +17,7 @@ class DueElement{
     var createdDate: time?
     
     //helper variable
-    var timeInterval: Int?
+    var timeInterval: Int?//Due date to create date in sec
     var timeLeft: Int?
     var timeLeftInMin: Int?
     var timeLeftInSec: Int?
@@ -26,15 +26,19 @@ class DueElement{
     var finishMonth_string: String?
     var finishProgress: Float?
     var isFinished: Bool?
+    var postNotify_y: Bool?
+    var postNotify_r: Bool?
     
     init(dueName: String, dueDate: time, createdDate: time){
         self.dueName = dueName
         self.dueDate = dueDate
         self.isFinished = false
-        self.timeInterval = dueDate.inputDate?.hours(from: (createdDate.inputDate)!)
+        self.timeInterval = dueDate.inputDate?.seconds(from: (createdDate.inputDate)!)
         self.timeLeft = dueDate.inputDate?.hours(from: (dueDate.currentDate)!)
         self.timeLeftInMin = dueDate.inputDate?.minutes(from: (dueDate.currentDate)!)
         self.timeLeftInSec = dueDate.inputDate?.seconds(from: (dueDate.currentDate)!)
+        self.postNotify_r = false
+        self.postNotify_y = false
         if (Float(timeLeft!)/24.0 <= 1.0) {color = red_}
         else if (Float(timeLeft!)/24.0 <= 2.0) {color = yellow_}
         else {color = green_}

@@ -232,14 +232,15 @@ class ListViewController: UIViewController_, UITableViewDelegate, UITableViewDat
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
-        var progress: Float?
+//        var progress = dueList[indexPath.section
         //custom progress bar
         let cell: DueElementCell = tableView.dequeueReusableCell(withIdentifier: "cell") as! DueElementCell
-        progress = 1 - (Float(dueList[indexPath.section].timeLeft!)/Float(dueList[indexPath.section].timeInterval!))
+        dueList[indexPath.section].finishProgress = 1 - (Float(dueList[indexPath.section].timeLeftInSec!)/Float(dueList[indexPath.section].timeInterval!))
         cell.ProgressBar?.progressTintColor = dueList[indexPath.section].color?.withAlphaComponent(0.5)
         cell.ProgressBar?.trackTintColor = dueList[indexPath.section].color?.withAlphaComponent(0.1)
-        cell.ProgressBar?.setProgress(progress!, animated: false)
-
+        cell.ProgressBar?.setProgress(dueList[indexPath.section].finishProgress!, animated: false)
+        
+        print("setProgess")
         //Assign text to label
         cell.DueNameLabel?.text = dueList[indexPath.section].dueName
         cell.DueDateLabel?.text = dueList[indexPath.section].dueMonth_string! + " " + dueList[indexPath.section].getDueDateText() + ", " + dueList[indexPath.section].getDueYearText()
@@ -249,11 +250,15 @@ class ListViewController: UIViewController_, UITableViewDelegate, UITableViewDat
         else if (dueList[indexPath.section].color == yellow_){
             cell.TimeLeftLabel?.text = String(dueList[indexPath.section].timeLeft!) + " Hrs"
         }
-        else if (dueList[indexPath.section].timeLeft! <= 0){
+        else if (dueList[indexPath.section].timeLeftInMin! <= 0){
             cell.TimeLeftLabel?.text = "0 Min"
-        }else{
-            cell.TimeLeftLabel?.text = String(dueList[indexPath.section].timeLeft!) + " Hrs" + String(dueList[indexPath.section].timeLeftInMin! - dueList[indexPath.section].timeLeft!*60) + " Mins"
         }
+        else{//(dueList[indexPath.section].timeLeft! <= 0 && dueList[indexPath.section].timeLeftInMin! > 0){
+            cell.TimeLeftLabel?.text = String(dueList[indexPath.section].timeLeftInMin!) + " Mins"
+        }
+//        else{
+//            cell.TimeLeftLabel?.text = String(dueList[indexPath.section].timeLeft!) + " Hrs " + String(dueList[indexPath.section].timeLeftInMin! - dueList[indexPath.section].timeLeft!*60) + " Mins "
+//        }
         
         //add Mclist functionalities
         cell.separatorInset = UIEdgeInsets.zero
@@ -304,7 +309,6 @@ class ListViewController: UIViewController_, UITableViewDelegate, UITableViewDat
             default:
                 dueList[indexPath.section].finishMonth_string = "invalid"
             }
-            dueList[indexPath.section].finishProgress = progress
             dueList[indexPath.section].isFinished = true
             //swipe right to insert into archiveList; sort through finishDate
             if archiveList.isEmpty{
@@ -390,19 +394,22 @@ class ListViewController: UIViewController_, UITableViewDelegate, UITableViewDat
     }
     
     func updateList(){
+        print("udateList!")
         if (dueList.isEmpty == false){
             var count_temp = dueList.count
             var i = 0
+//            var indexPath = NSIndexPath(row: i, section: 0)
             while (i < count_temp){
                 dueList[i].refreshData()//refresh data
-                if (dueList[i].timeLeft! <= 0){
+                print("list :\(i), insec :\(dueList[i].timeLeftInSec!)")
+                dueList[i].finishProgress = 1 - (Float(dueList[i].timeLeftInSec!)/Float(dueList[i].timeInterval!))
+                print("update to progress:\(dueList[i].finishProgress)")
+                if (dueList[i].timeLeftInSec! <= 0){
                     let components = getCurrentTimeComponents()
                     dueList[i].finishDate = time(year: components.year, month: components.month, date: components.day, hour: components.hour, minute: components.minute)
                     dueList[i].isFinished = false//mark as not finished
                     dueList[i].monthStringInput(month: components.month!)
-                    dueList[i].finishProgress = 1 - (Float(dueList[i].timeLeft!)/Float(dueList[i].timeInterval!))
-
-//                    insert into archiveList; sort through finishDate
+                    //insert into archiveList; sort through finishDate
                     if archiveList.isEmpty{
                         archiveList.insert(dueList[i], at:0)
                     }else{
@@ -422,10 +429,14 @@ class ListViewController: UIViewController_, UITableViewDelegate, UITableViewDat
                     dueList.remove(at: i)
                     count_temp -= 1
                 }
+                if (dueList[i].postNotify_y == false){
+                    
+                }
                 i += 1
             }
             print("update!")
             DueListView.reloadData()
+//            self.refresh()
         }
     }
 

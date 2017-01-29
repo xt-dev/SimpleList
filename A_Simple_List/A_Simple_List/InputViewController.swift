@@ -63,6 +63,8 @@ class InputViewController: UIViewController_{
             }}, completion: nil)
     }
     
+    var viewTransitionManager_reverse = ViewTransitionManager_reverse()
+    
     //Handle swipe gesture
     func handleSwipes(_ sender : UISwipeGestureRecognizer){
         if(sender.direction == .up){
@@ -103,7 +105,8 @@ class InputViewController: UIViewController_{
             }
 
             let secondViewController = self.storyboard?.instantiateViewController(withIdentifier: "LVC")
-            self.present(secondViewController!, animated: false, completion: nil)
+            secondViewController?.transitioningDelegate = self.viewTransitionManager_reverse
+            self.present(secondViewController!, animated: true, completion: nil)
         }
     }
     

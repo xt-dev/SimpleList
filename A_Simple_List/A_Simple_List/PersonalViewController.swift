@@ -128,15 +128,18 @@ class PersonalViewController: UIViewController_, UITableViewDelegate, UITableVie
         ]
         let set = PieChartDataSet(values: entries, label: "Data")
         set.highlightEnabled = false //highlight color?
-        set.valueTextColor = .black //text color 总的
-        set.entryLabelColor = .blue //label color
+        set.valueTextColor = grey_ //text color 总的
+        set.entryLabelColor = background_ //label color
         //other settings: change something in the piechart view
         
         
-        set.colors = ChartColorTemplates.material()//set the color
+        set.colors = [green_, yellow_, red_]//set the color
         chartView.data = PieChartData(dataSet: set)
         chartView.animate(xAxisDuration: 2.0, yAxisDuration: 2.0)//, easingX: .EaseInCubic, easingY: .EaseInCubic)
         chartView.legend.enabled = false
+        let pFormatter = NumberFormatter()
+        pFormatter.numberStyle = .none
+        chartView.data?.setValueFormatter(DefaultValueFormatter(formatter: pFormatter))
         view.addSubview(chartView)
         
         createRightEdgePanGestureRecognizer(targetView: self.view)

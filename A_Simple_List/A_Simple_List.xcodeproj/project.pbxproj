@@ -39,6 +39,7 @@
 		B885DB6C1E1C6ACE00CEB1AA /* 红色箭头2.png in Resources */ = {isa = PBXBuildFile; fileRef = B885DB6A1E1C6ACE00CEB1AA /* 红色箭头2.png */; };
 		B885DB6D1E1C6ACE00CEB1AA /* 绿色箭头2.png in Resources */ = {isa = PBXBuildFile; fileRef = B885DB6B1E1C6ACE00CEB1AA /* 绿色箭头2.png */; };
 		B885DB711E1C9B4500CEB1AA /* ArchiveElementCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B885DB701E1C9B4500CEB1AA /* ArchiveElementCell.swift */; };
+		B8AB48B91E2D89B7005982B4 /* ViewTransitionManager_reverse.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8AB48B81E2D89B7005982B4 /* ViewTransitionManager_reverse.swift */; };
 		C79E2A16BE34B7F450755F48 /* Pods_A_Simple_List.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62AD27CDB70AFC499F7D8459 /* Pods_A_Simple_List.framework */; };
 /* End PBXBuildFile section */
 
@@ -79,6 +80,7 @@
 		B885DB6A1E1C6ACE00CEB1AA /* 红色箭头2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "红色箭头2.png"; sourceTree = "<group>"; };
 		B885DB6B1E1C6ACE00CEB1AA /* 绿色箭头2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "绿色箭头2.png"; sourceTree = "<group>"; };
 		B885DB701E1C9B4500CEB1AA /* ArchiveElementCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArchiveElementCell.swift; sourceTree = "<group>"; };
+		B8AB48B81E2D89B7005982B4 /* ViewTransitionManager_reverse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewTransitionManager_reverse.swift; sourceTree = "<group>"; };
 		C7C3141A94D66E68E0EB2CCD /* Pods-A_Simple_List.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-A_Simple_List.release.xcconfig"; path = "Pods/Target Support Files/Pods-A_Simple_List/Pods-A_Simple_List.release.xcconfig"; sourceTree = "<group>"; };
 		CE58E2D2B1CDC2B53C617008 /* Pods-A_Simple_List.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-A_Simple_List.debug.xcconfig"; path = "Pods/Target Support Files/Pods-A_Simple_List/Pods-A_Simple_List.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -153,6 +155,7 @@
 				B843F4501E1EF35C00510D52 /* circularPathView.swift */,
 				B821D3871E18634800F72404 /* DueElement.swift */,
 				B821D3951E18ABE600F72404 /* ViewTransitionManager.swift */,
+				B8AB48B81E2D89B7005982B4 /* ViewTransitionManager_reverse.swift */,
 				B885DB5B1E1C60B600CEB1AA /* Extension.swift */,
 				B885DB5D1E1C63F000CEB1AA /* 图片 */,
 				B828195E1E1D9A2F00F6156B /* Font */,
@@ -367,6 +370,7 @@
 				B821D38A1E18641A00F72404 /* DueElementCell.swift in Sources */,
 				B813E99E1E2187AB002A46DB /* PersonalViewController.swift in Sources */,
 				B87279641E1C5A7400167E4C /* ArchiveViewController.swift in Sources */,
+				B8AB48B91E2D89B7005982B4 /* ViewTransitionManager_reverse.swift in Sources */,
 				B843F44F1E1EF2A200510D52 /* FocusViewController.swift in Sources */,
 				B885DB5C1E1C60B600CEB1AA /* Extension.swift in Sources */,
 			);
