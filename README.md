@@ -1,2 +1,7 @@
-# DueList
-搞个大新闻
+# Simple List
+An IOS app developed by Xintong Wu, Zhidong Qu, Ruilin Zhang.
+##UI
+##Features
+
+
+
